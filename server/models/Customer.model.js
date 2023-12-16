@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const customerSchema = new mongoose.Schema({
+const customerSchema = new Schema({
     email: {
         type: String,
         required: true,
@@ -13,45 +13,23 @@ const customerSchema = new mongoose.Schema({
     },
     bookedRooms: [
         {
-            roomId: {
-                type: String,
-            },
-            checkInDate: {
-                type: Date,
-                required: true
-            },
-            checkOutDate: {
-                type: Date,
-                required: true
-            }
+            type: String,
         }
     ],
     wishlist: [
         {
-            roomId: {
-                type: String,
-            }
+            type: String,
         }
     ],
     bookedHistory: [
         {
-            roomId: {
-                type: String,
-            },
-            checkInDate: {
-                type: Date,
-                required: true
-            },
-            checkOutDate: {
-                type: Date,
-                required: true
-            }
+            type: String,
         }
     ]
 }, {
     timestamps: true
 });
 
-const Customer = mongoose.model('Customers', customerSchema);
+const Customer = model('Customers', customerSchema);
 
-module.exports = Customer;
+export default Customer;

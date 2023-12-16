@@ -1,7 +1,11 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose from 'mongoose';
 
-const roomSchema = new Schema({
+
+const roomSchema = new mongoose.Schema({
+    houseOwnerId: {
+        type: String,
+        required: true,
+    },
     roomName: {
         type: String,
         required: true
@@ -34,16 +38,17 @@ const roomSchema = new Schema({
     ],
     roomImages: [
         {
-            imageUrl: {
-                type: String,
-                default: "",
-            }
+            type: String,
         }
-    ]
+    ],
+    isAvailable: {
+        type: Boolean,
+        default: true,
+    }
 }, {
     timestamps: true
 });
 
 const Room = mongoose.model('Room', roomSchema);
 
-module.exports = Room;
+export default Room;
