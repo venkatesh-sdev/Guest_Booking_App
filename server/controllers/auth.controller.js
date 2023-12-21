@@ -1,5 +1,5 @@
-import Customer from '../models/Customer.model.js';
-import HouseOwnerModel from '../models/HouseOwner.model.js';
+import Customer from '../models/Customer.js';
+import HouseOwnerModel from '../models/HouseOwner.js';
 import { genSalt, hash, compare } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -68,9 +68,10 @@ export const HouseOwnerSignUpController = async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        if(!email||!password) return res.status(400).json({message:"Please Check your Email and Password"})
+
         // Check User Is Already Exits
         const user = await HouseOwnerModel.findOne({ email });
-        console.log(user)
         if (user) return res.status(400).json({ message: "The Email Already Exist" })
 
         // Creating a salt for Hashing the password
@@ -95,6 +96,8 @@ export const HouseOwnerSignUpController = async (req, res) => {
 export const HouseOwnerSignInController = async (req, res, next) => {
     try {
         const { email, password } = req.body;
+
+        if (!email || !password) return res.status(400).json({ message: "Please Check your Email and Password" })
 
         // Checking User Exists OR Not
         const houseOwner = await HouseOwnerModel.findOne({ email });
