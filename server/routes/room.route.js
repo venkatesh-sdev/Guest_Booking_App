@@ -1,10 +1,14 @@
 import { Router } from 'express'
 
 const router = Router();
-import { CreateRoomController, UpdateRoomController, DeleteRoomController, BookRoomController, CancelRoomController } from '../controllers/room.controller.js';
+import { CreateRoomController, UpdateRoomController, DeleteRoomController, BookRoomController, CancelRoomController, GetAllRoomsController, GetRoomController } from '../controllers/room.controller.js';
 import { verifyToken } from '../middlewares/auth.middleware.js';
 
 
+// Get All Rooms
+router.get('/allrooms', GetAllRoomsController);
+// Get Room
+router.get('/room/:id', GetRoomController);
 // CreateRoom
 router.post('/create', verifyToken, CreateRoomController);
 // UpdateRoom

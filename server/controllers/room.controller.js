@@ -2,6 +2,38 @@ import HouseOwnerModel from '../models/HouseOwner.js';
 import Room from '../models/Room.js';
 import Booking from '../models/Booking.js';
 import Customer from '../models/Customer.js';
+import SendMail from '../configs/email.js';
+
+
+// GetAllRooms Controller
+export const GetAllRoomsController = async (req, res, next) => {
+    try {
+        // Getting All Rooms
+        const rooms = await Room.find({});
+        // Sending Result
+        res.status(201).json({ result: 'Success', data: rooms });
+
+    } catch (error) {
+        // Sending Unhandled Error As Response
+        res.status(400).json({ errorMessage: error.message })
+    }
+}
+
+// GetRoom Controller
+export const GetRoomController = async (req, res, next) => {
+    try {
+        // Getting All Rooms
+        const room = await Room.findById(req.params.id);
+
+        // Sending Result
+        res.status(201).json({ result: 'Success', data: room });
+
+    } catch (error) {
+        // Sending Unhandled Error As Response
+        res.status(400).json({ errorMessage: error.message })
+    }
+}
+
 
 // CreateRoom Controller
 export const CreateRoomController = async (req, res, next) => {
@@ -96,19 +128,34 @@ export const BookRoomController = async (req, res, next) => {
 
         // Adding to Customers Booked Room
         const customer = await Customer.findById(req.user.id);
-
-        if (!customer) res.status(400).json({ message: 'Customer Is Not Exists' })
+        if (!customer) res.status(400).json({ message: 'Customer Is Not Exists' });
 
         customer.bookedRooms = [...customer.bookedRooms, roomBooking._id];
         customer.bookedHistory.push(roomBooking._id);
         customer.save();
+        // Message for an Email
+        let customerMessage = {
+            from: process.env.APP_EMAIL,
+            to: customer.email,
+            subject: 'Room Booked Successfull',
+            html: "<h1> Room Booked Successfull </h1>"
+        }
+        // Sending Email
+        SendMail(customerMessage);
 
         // Adding to House Owner Booked Room
         const houseOwner = await HouseOwnerModel.findById(houseOwnerId);
         houseOwner.bookedRooms.push(roomBooking._id);
         houseOwner.save();
-
-
+        // Message for an Email
+        let houseOwnerMessage = {
+            from: process.env.APP_EMAIL,
+            to: houseOwner.email,
+            subject: 'Room Booked Successfull',
+            html: "<h1> Room Booked Successfull </h1>"
+        }
+        // Sending Email
+        SendMail(houseOwnerMessage);
 
         res.status(201).json({ message: "Room Booked Successfully", customer })
 
@@ -135,14 +182,34 @@ export const CancelRoomController = async (req, res, next) => {
 
         customer.bookedRooms = customer.bookedRooms.filter(value => value != bookingId);
         customer.save();
+        // Message for an Email
+        let customerMessage = {
+            from: process.env.APP_EMAIL,
+            to: customer.email,
+            subject: 'Room Canceld Successfull',
+            html: "<h1> Room Canceld Successfull </h1>"
+        }
+        // Sending Email
+        SendMail(customerMessage);
 
         // Removing to House Owner Booked Room
         const houseOwner = await HouseOwnerModel.findById(houseOwnerId);
         houseOwner.bookedRooms = houseOwner.bookedRooms.filter(value => value != bookingId);
         houseOwner.save();
 
+        // Message for an Email
+        let houseOwnerMessage = {
+            from: process.env.APP_EMAIL,
+            to: houseOwner.email,
+            subject: 'Room Canceled  ',
+            html: "<h1> Room Canceled  </h1>"
+        }
+        // Sending Email
+        SendMail(houseOwnerMessage);
+
         // Deleting a Booking
         await Booking.findByIdAndDelete(bookingId);
+
 
         res.status(200).json({ houseOwner, customer })
 
