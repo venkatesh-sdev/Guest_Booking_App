@@ -2,7 +2,7 @@ import Customer from '../models/Customer.js';
 import HouseOwnerModel from '../models/HouseOwner.js';
 import { genSalt, hash, compare } from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import SendEmail from '../configs/email.js';
+import SendEmail from '../utils/email.js';
 
 
 // Customer Authentication

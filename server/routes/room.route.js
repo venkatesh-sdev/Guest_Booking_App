@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
 const router = Router();
-import { CreateRoomController, UpdateRoomController, DeleteRoomController, BookRoomController, CancelRoomController, GetAllRoomsController, GetRoomController } from '../controllers/room.controller.js';
+import { CreateRoomController, UpdateRoomController, DeleteRoomController, BookRoomController, CancelRoomController, GetAllRoomsController, GetRoomController, BookingPaymentController } from '../controllers/room.controller.js';
 import { verifyToken } from '../middlewares/auth.middleware.js';
 
 
@@ -19,5 +19,7 @@ router.delete('/delete/:id', verifyToken, DeleteRoomController);
 router.put('/bookroom', verifyToken, BookRoomController);
 // CancelRoom
 router.put('/cancelroom', verifyToken, CancelRoomController);
+// Booking Payment
+router.post('/bookingpayment', verifyToken, BookingPaymentController);
 
 export default router;
