@@ -248,11 +248,15 @@ export const CancelRoomController = async (req, res, next) => {
     }
 }
 
-
+// Booking Payment Controller
 export const BookingPaymentController = async (req, res) => {
     try {
+        // Creating Transaction Id for Verification
         const transactionId = uuid4();
+
+        // Creating new Stripe Object
         const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+        // Creating a Checkout Session for Checkout 
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             mode: 'payment',
@@ -270,10 +274,12 @@ export const BookingPaymentController = async (req, res) => {
             )),
             success_url: `/bookroom/:${transactionId}`,
             cancel_url: '/bookingcancel',
-            ui_mode:'embedded'
+            ui_mode: 'embedded'
         })
+        // Sending Response to the Client of session URL
         return res.status(200).json({ url: session.url });
     } catch (error) {
+        // Send Unhandeld Error Response
         return res.status(500).json({ message: error.message });
     }
 
