@@ -4,7 +4,7 @@ import Booking from '../models/Booking.js';
 import Customer from '../models/Customer.js';
 import SendMail from '../utils/email.js';
 import schedule from 'node-schedule';
-import Stripe from 'stripe';
+// import Stripe from 'stripe';
 import { v4 as uuid4 } from 'uuid'
 
 // GetAllRooms Controller
@@ -118,6 +118,7 @@ export const DeleteRoomController = async (req, res, next) => {
 // BookRoom
 export const BookRoomController = async (req, res, next) => {
     try {
+
         // Extracting data from request
         let { houseOwnerId, roomId, checkInDate, checkOutDate } = req.body;
 
@@ -130,7 +131,6 @@ export const BookRoomController = async (req, res, next) => {
         if (!bookedRoom.isAvailable) return res.status(200).json({ message: `Sorry The Room Not Available Yet` })
         bookedRoom.isAvailable = false;
         bookedRoom.save();
-
 
         // Creating a booking 
         const roomBooking = await Booking.create({ roomId, checkInDate, checkOutDate, houseOwnerId, customerId: req.user.id });
@@ -152,19 +152,45 @@ export const BookRoomController = async (req, res, next) => {
         // Sending Email
         SendMail(customerMessage);
 
-        schedule.scheduleJob('reminder-payment' + bookedRoom._id, '0 1 */1 * *', () => {
-            let reminderMessage = {
-                from: process.env.APP_EMAIL,
-                to: customer.email,
-                subject: 'Room Rent Reminder',
-                html: "<h1> Room Rent Reminder</h1>"
-            }
-            SendMail(reminderMessage);
-            if (checkOutDate < new Date()) {
-                schedule.cancelJob('reminder-payment' + bookedRoom._id);
-            }
-        })
+        // Creating Transaction Id for Verification
+        const transactionId = uuid4();
 
+        // schedule.scheduleJob('reminder-payment' + bookedRoom._id, '0 1 */1 * *', async () => {
+        //     // Creating new Stripe Object
+        //     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+        //     // Creating a Checkout Session for Checkout 
+        //     const session = await stripe.checkout.sessions.create({
+        //         payment_method_types: ['card'],
+        //         mode: 'payment',
+        //         line_items: req.body.rooms.map(room => (
+        //             {
+        //                 price_data: {
+        //                     currency: 'inr',
+        //                     product_data: {
+        //                         name: room.name
+        //                     },
+        //                     unit_amount: room.price * 100
+        //                 },
+        //                 quantity: 1
+        //             }
+        //         )),
+        //         success_url: `/bookingroom/:${transactionId}`,
+        //         cancel_url: '/bookingcancel',
+        //         ui_mode: 'hosted'
+        //     })
+        //     let reminderMessage = {
+        //         from: process.env.APP_EMAIL,
+        //         to: customer.email,
+        //         subject: 'Room Rent Reminder',
+        //         html: `<h1> Room Rent Reminder</h1><br/>
+        //             <b><a href="${session.url}">click Here to Pay</a></b>
+        //             `
+        //     }
+        //     SendMail(reminderMessage);
+        //     if (checkOutDate < new Date()) {
+        //         schedule.cancelJob('reminder-payment' + bookedRoom._id);
+        //     }
+        // })
 
         // Adding to House Owner Booked Room
         const houseOwner = await HouseOwnerModel.findById(houseOwnerId);
@@ -188,6 +214,8 @@ export const BookRoomController = async (req, res, next) => {
     }
 }
 
+
+
 // CancelRoom
 export const CancelRoomController = async (req, res, next) => {
     try {
@@ -196,7 +224,7 @@ export const CancelRoomController = async (req, res, next) => {
 
         // Mark as Room available for other users
         const bookedRoom = await Room.findById(roomId);
-        if (!bookedRoom.isAvailable) return res.status(200).json({ message: `Sorry The Room Not Booked Yet So You Can't Cancel It` })
+        if (!bookedRoom.isAvailable) return res.status(200).json({ message: `Sorry The Room Not Booked Yet So You Can't Cancel It` });
         bookedRoom.isAvailable = true;
         bookedRoom.save();
 
@@ -246,41 +274,4 @@ export const CancelRoomController = async (req, res, next) => {
         // Sending Unhandled Error As Response
         res.status(400).json({ errorMessage: error.message })
     }
-}
-
-// Booking Payment Controller
-export const BookingPaymentController = async (req, res) => {
-    try {
-        // Creating Transaction Id for Verification
-        const transactionId = uuid4();
-
-        // Creating new Stripe Object
-        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-        // Creating a Checkout Session for Checkout 
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types: ['card'],
-            mode: 'payment',
-            line_items: req.body.rooms.map(room => (
-                {
-                    price_data: {
-                        currency: 'inr',
-                        product_data: {
-                            name: room.name
-                        },
-                        unit_amount: room.price * 100
-                    },
-                    quantity: 1
-                }
-            )),
-            success_url: `/bookroom/:${transactionId}`,
-            cancel_url: '/bookingcancel',
-            ui_mode: 'embedded'
-        })
-        // Sending Response to the Client of session URL
-        return res.status(200).json({ url: session.url });
-    } catch (error) {
-        // Send Unhandeld Error Response
-        return res.status(500).json({ message: error.message });
-    }
-
 }

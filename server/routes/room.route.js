@@ -19,7 +19,5 @@ router.delete('/delete/:id', verifyToken, DeleteRoomController);
 router.put('/bookroom', verifyToken, BookRoomController);
 // CancelRoom
 router.put('/cancelroom', verifyToken, CancelRoomController);
-// Booking Payment
-router.post('/bookingpayment', verifyToken, BookingPaymentController);
 
 export default router;

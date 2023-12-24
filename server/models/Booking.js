@@ -6,7 +6,8 @@ const bookingSchema = new mongoose.Schema({
     houseOwnerId: { type: String, required: true },
     checkInDate: { type: Date, required: true },
     checkOutDate: { type: Date, required: true },
-    transactionId: { type: String, required: true }
+    transactionId: { type: String, required: true },
+
 });
 
 const Booking = mongoose.model('Booking', bookingSchema);
