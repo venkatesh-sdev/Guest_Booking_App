@@ -64,6 +64,15 @@ const DBConnection = async () => {
     try {
         await mongoose.connect(process.env.MONGO_CONNECTION);
         console.log("DB Connected");
+        // The App Listing in the PORT of 3001
+        app.listen(
+            process.env.PORT,
+            () => {
+                console.log("Server Running in http://localhost:" + process.env.PORT);
+                // Data Insertion
+                // console.log("Data Added Succesfully");
+            }
+        )
     }
     catch (error) {
         console.log(error);
@@ -73,12 +82,3 @@ const DBConnection = async () => {
 // MongoDB Database Connection Call
 DBConnection();
 
-// The App Listing in the PORT of 3001
-app.listen(
-    process.env.PORT,
-    () => {
-        console.log("Server Running in http://localhost:" + process.env.PORT);
-        // Data Insertion
-        // console.log("Data Added Succesfully");
-    }
-)
