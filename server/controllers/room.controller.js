@@ -1,10 +1,9 @@
-import HouseOwnerModel from '../models/HouseOwner.js';
 import Room from '../models/Room.js';
 import Booking from '../models/Booking.js';
-import Customer from '../models/Customer.js';
+import User from '../models/User.js';
 import SendMail from '../utils/email.js';
 import schedule from 'node-schedule';
-// import Stripe from 'stripe';
+import Stripe from 'stripe';
 import { v4 as uuid4 } from 'uuid'
 
 // GetAllRooms Controller
@@ -41,19 +40,29 @@ export const GetRoomController = async (req, res, next) => {
 export const CreateRoomController = async (req, res, next) => {
     try {
         // Finding the HouseOwner with userId
-        const houseOwner = await HouseOwnerModel.findById(req.user.id);
+        const houseOwner = await User.findById(req.user.id);
 
-        if (!houseOwner) return res.status(400).json({ message: "User not Found in HouseOwner Registrey Please SignUp as HouseOwner to create a Rooms" });
+        if (!houseOwner) return res.status(400).json({ message: "User not Found Please SignUp as User to create a Rooms" });
+
+
+        let files = req.files;
+
+        if (files.length > 0) {
+            files = files.map(data => data.filename);
+        }
+
+        const body = JSON.parse(req.body.data);
 
         // Creating Room
-        const newRoom = await Room.create({ houseOwnerId: req.user.id, ...req.body });
+        // const newRoom = await Room.create({ houseOwnerId: req.user.id, ...body });
+        const newRoom = await Room.create({ houseOwnerId: req.user.id, roomImages: files, ...body });
         newRoom.save();
 
         // Adding room to the HouseOwner total rooms
-        houseOwner.totalRooms.push(newRoom._id);
+        houseOwner.yourRooms.push(newRoom._id);
         houseOwner.save();
 
-        // Sending Result
+        // // Sending Result
         res.status(201).json({ result: 'Success', data: newRoom });
 
     } catch (error) {
@@ -66,9 +75,9 @@ export const CreateRoomController = async (req, res, next) => {
 export const UpdateRoomController = async (req, res, next) => {
     try {
         // Finding the HouseOwner with userId
-        const houseOwner = await HouseOwnerModel.findById(req.user.id);
+        const houseOwner = await User.findById(req.user.id);
 
-        if (!houseOwner) return res.status(400).json({ message: "User not Found in HouseOwner Registrey Please SignUp as HouseOwner to Update a Rooms" });
+        if (!houseOwner) return res.status(400).json({ message: "User not Found  Please SignUp as User to Update a Rooms" });
 
         //Extracting the Params from the Request 
         const { id } = req.params;
@@ -93,9 +102,9 @@ export const UpdateRoomController = async (req, res, next) => {
 export const DeleteRoomController = async (req, res, next) => {
     try {
         // Finding the HouseOwner with userId
-        const houseOwner = await HouseOwnerModel.findById(req.user.id);
+        const houseOwner = await User.findById(req.user.id);
 
-        if (!houseOwner) return res.status(400).json({ message: "User not Found in HouseOwner Registrey Please SignUp as HouseOwner to Delete a Rooms" });
+        if (!houseOwner) return res.status(400).json({ message: "User not Found in  Please SignUp as User to Delete a Rooms" });
 
         // Extracting the Params from the Request 
         const { id } = req.params;
@@ -136,11 +145,11 @@ export const BookRoomController = async (req, res, next) => {
         const roomBooking = await Booking.create({ roomId, checkInDate, checkOutDate, houseOwnerId, customerId: req.user.id });
 
         // Adding to Customers Booked Room
-        const customer = await Customer.findById(req.user.id);
+        const customer = await User.findById(req.user.id);
         if (!customer) res.status(400).json({ message: 'Customer Is Not Exists' });
 
         customer.bookedRooms = [...customer.bookedRooms, roomBooking._id];
-        customer.bookedHistory.push(roomBooking._id);
+        customer.roomBookedHistory.push(roomBooking._id);
         customer.save();
         // Message for an Email
         let customerMessage = {
@@ -155,45 +164,45 @@ export const BookRoomController = async (req, res, next) => {
         // Creating Transaction Id for Verification
         const transactionId = uuid4();
 
-        // schedule.scheduleJob('reminder-payment' + bookedRoom._id, '0 1 */1 * *', async () => {
-        //     // Creating new Stripe Object
-        //     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-        //     // Creating a Checkout Session for Checkout 
-        //     const session = await stripe.checkout.sessions.create({
-        //         payment_method_types: ['card'],
-        //         mode: 'payment',
-        //         line_items: req.body.rooms.map(room => (
-        //             {
-        //                 price_data: {
-        //                     currency: 'inr',
-        //                     product_data: {
-        //                         name: room.name
-        //                     },
-        //                     unit_amount: room.price * 100
-        //                 },
-        //                 quantity: 1
-        //             }
-        //         )),
-        //         success_url: `/bookingroom/:${transactionId}`,
-        //         cancel_url: '/bookingcancel',
-        //         ui_mode: 'hosted'
-        //     })
-        //     let reminderMessage = {
-        //         from: process.env.APP_EMAIL,
-        //         to: customer.email,
-        //         subject: 'Room Rent Reminder',
-        //         html: `<h1> Room Rent Reminder</h1><br/>
-        //             <b><a href="${session.url}">click Here to Pay</a></b>
-        //             `
-        //     }
-        //     SendMail(reminderMessage);
-        //     if (checkOutDate < new Date()) {
-        //         schedule.cancelJob('reminder-payment' + bookedRoom._id);
-        //     }
-        // })
+        schedule.scheduleJob('reminder-payment' + bookedRoom._id, '0 1 */1 * *', async () => {
+            // Creating new Stripe Object
+            const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+            // Creating a Checkout Session for Checkout 
+            const session = await stripe.checkout.sessions.create({
+                payment_method_types: ['card'],
+                mode: 'payment',
+                line_items: req.body.rooms.map(room => (
+                    {
+                        price_data: {
+                            currency: 'inr',
+                            product_data: {
+                                name: room.name
+                            },
+                            unit_amount: room.price * 100
+                        },
+                        quantity: 1
+                    }
+                )),
+                success_url: `/bookingroom/:${transactionId}`,
+                cancel_url: '/bookingcancel',
+                ui_mode: 'hosted'
+            })
+            let reminderMessage = {
+                from: process.env.APP_EMAIL,
+                to: customer.email,
+                subject: 'Room Rent Reminder',
+                html: `<h1> Room Rent Reminder</h1><br/>
+                    <b><a href="${session.url}">click Here to Pay</a></b>
+                    `
+            }
+            SendMail(reminderMessage);
+            if (checkOutDate < new Date()) {
+                schedule.cancelJob('reminder-payment' + bookedRoom._id);
+            }
+        })
 
         // Adding to House Owner Booked Room
-        const houseOwner = await HouseOwnerModel.findById(houseOwnerId);
+        const houseOwner = await User.findById(houseOwnerId);
         houseOwner.bookedRooms.push(roomBooking._id);
         houseOwner.save();
         // Message for an Email
@@ -231,7 +240,7 @@ export const CancelRoomController = async (req, res, next) => {
         schedule.cancelJob('reminder-payment' + bookingId);
 
         // Removing to House Owner Booked Room
-        const customer = await Customer.findById(req.user.id);
+        const customer = await User.findById(req.user.id);
 
         // Check If the customer Exits or Not
         if (!customer) res.status(400).json({ message: 'Customer Is Not Exists' })
@@ -251,7 +260,7 @@ export const CancelRoomController = async (req, res, next) => {
         SendMail(customerMessage);
 
         // Removing to House Owner Booked Room
-        const houseOwner = await HouseOwnerModel.findById(houseOwnerId);
+        const houseOwner = await User.findById(houseOwnerId);
         houseOwner.bookedRooms = houseOwner.bookedRooms.filter(value => value != bookingId);
         houseOwner.save();
 

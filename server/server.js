@@ -12,8 +12,10 @@ import AuthRoute from './routes/auth.route.js'
 import RoomRoute from './routes/room.route.js'
 
 // Controllers
+import { CreateRoomController } from './controllers/room.controller.js';
 
 // Token
+import { verifyToken } from './middlewares/auth.middleware.js';
 
 // Models
 
@@ -44,18 +46,21 @@ const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'public/assets');
     },
-    filename: (req, file, cb) => {
-        cb(null, file.originalname);
-    }
+    filename: function (req, file, cb) {
+        cb(null, `${Date.now()}_${file.originalname}`);
+    },
 });
 
-export const upload = multer({ storage });
+const upload = multer({ storage });
 
 // --- Routes With Files --- //
+app.post('/room/create', verifyToken, upload.array('files'), CreateRoomController);
+
+
 
 // --- Router Routes --- //
-app.use('/api/auth', AuthRoute);
-app.use('/api/room', RoomRoute);
+app.use('/auth', AuthRoute);
+app.use('/room', RoomRoute);
 
 
 
@@ -75,7 +80,8 @@ const DBConnection = async () => {
         )
     }
     catch (error) {
-        console.log(error);
+        console.log(error.message);
+        console.log("Check Your Connection")
     }
 };
 

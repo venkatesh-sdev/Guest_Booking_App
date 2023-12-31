@@ -1,21 +1,17 @@
 import { Router } from 'express'
-
-const router = Router();
 import {
-    HouseOwnerSignInController,
-    HouseOwnerSignUpController,
-    CustomerSignInController,
-    CustomerSignUpController
+    signInController,
+    signUpController
 } from '../controllers/auth.controller.js';
 
-// House Owner SignUp 
-router.post('/houseowner/signup', HouseOwnerSignUpController);
-// House Owner SignIn
-router.post('/houseowner/signin', HouseOwnerSignInController);
 
-// Customer SignUp 
-router.post('/customer/signup', CustomerSignUpController);
-// Customer SignIn
-router.post('/customer/signin', CustomerSignInController);
+
+const router = Router();
+
+// SignUp 
+router.post('/signup', signUpController);
+// SignIn
+router.post('/signin', signInController);
+
 
 export default router;

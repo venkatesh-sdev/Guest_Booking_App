@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const customerSchema = new Schema({
+const userSchema = new Schema({
     email: {
         type: String,
         required: true,
@@ -11,17 +11,27 @@ const customerSchema = new Schema({
         type: String,
         required: true
     },
-    bookedRooms: [
-        {
-            type: String,
-        }
-    ],
     wishlist: [
         {
             type: String,
         }
     ],
-    bookedHistory: [
+    roomBookedHistory: [
+        {
+            type: String,
+        }
+    ],
+    yourRooms: [
+        {
+            type: String,
+        }
+    ],
+    availableRooms: [
+        {
+            type: String,
+        }
+    ],
+    unAvailableRooms: [
         {
             type: String,
         }
@@ -30,6 +40,6 @@ const customerSchema = new Schema({
     timestamps: true
 });
 
-const Customer = model('Customers', customerSchema);
+const User = model('Users', userSchema);
 
-export default Customer;
+export default User;

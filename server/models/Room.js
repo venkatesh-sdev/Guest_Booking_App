@@ -14,14 +14,15 @@ const roomSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    floorSize: {
-        type: String,
+    floorNumber: {
+        type: Number,
         required: true
     },
     rentPerDay: {
         type: Number,
         required: true,
     },
+
     minimumRentDays: {
         type: Number,
         required: true,
@@ -33,7 +34,7 @@ const roomSchema = new mongoose.Schema({
     otherFeatures: [
         {
             type: String,
-            enum: ['AC', 'Fridge', 'WashingMachine', 'Sofa', 'TV']
+            enum: ['AC', 'Fridge', 'Washing Machine', 'Sofa', 'TV']
         }
     ],
     roomImages: [
