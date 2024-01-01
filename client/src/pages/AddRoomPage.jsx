@@ -2,7 +2,7 @@
 import React, { useRef, useState } from 'react'
 import { IoCloudUploadOutline } from "react-icons/io5";
 import axios from 'axios'
-import URLS from '../constants/urls';
+import URLS from '../constants/urls.js';
 import { convertToBase64 } from '../constants/base64Converter';
 
 const AddRoomPage = () => {
