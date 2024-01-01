@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios';
+import URLS from '../constants/URLS';
 
 
 
@@ -13,7 +14,7 @@ const initialState = {
 
 export const apiRegister = createAsyncThunk('auth/Register', async (data) => {
     try {
-        const result = await axios.post(`http://localhost:3001/auth/signup`, data);
+        const result = await axios.post(URLS.apiRegister, data);
         return result.data;
     } catch (error) {
         console.log(error)
@@ -23,7 +24,7 @@ export const apiRegister = createAsyncThunk('auth/Register', async (data) => {
 
 export const apiLogin = createAsyncThunk('auth/Login', async (data) => {
     try {
-        const result = await axios.post(`http://localhost:3001/auth/signin`, data);
+        const result = await axios.post(URLS.apiLogin, data);
         return result.data;
     } catch (error) {
         console.log(error)

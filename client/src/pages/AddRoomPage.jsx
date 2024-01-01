@@ -2,6 +2,7 @@
 import React, { useRef, useState } from 'react'
 import { IoCloudUploadOutline } from "react-icons/io5";
 import axios from 'axios'
+import URLS from '../constants/URLS';
 
 const AddRoomPage = () => {
     // Input References
@@ -55,20 +56,22 @@ const AddRoomPage = () => {
             rentPerDay: rentPerDayRef.current.value,
             minimumRentDays: minNoDays.current.value,
             maximumRentDays: maxNoDays.current.value,
-            otherFeatures,
+            otherFeatures: otherFeatures,
         }
 
         const formData = new FormData();
 
         if (data.floorNumber && data.roomName && data.numberOfBeds && data.maximumRentDays && data.minimumRentDays && data.rentPerDay) {
             images.map(image => { formData.append('files', image) })
-            formData.append('data', JSON.stringify(data))
+            for (const [key, value] of Object.entries(data)) {
+                formData.append(`${key}`, value);
+            }
         }
         // const config = {
         //     headers: { "Authorization": `Bearer ${testToken}` }
         // };
-        const result = await axios.post('http://localhost:3001/room/create', formData, {
-            headers: { "Authorization": encodeURI(`Bearer ${testToken}`), }
+        const result = await axios.post(URLS.apiCreateRoom, formData, {
+            headers: { "Authorization": `Bearer ${testToken}`, }
         });
         console.log(result.data)
 

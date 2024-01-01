@@ -44,25 +44,33 @@ export const CreateRoomController = async (req, res, next) => {
 
         if (!houseOwner) return res.status(400).json({ message: "User not Found Please SignUp as User to create a Rooms" });
 
-
         let files = req.files;
 
         if (files.length > 0) {
             files = files.map(data => data.filename);
         }
 
-        const body = JSON.parse(req.body.data);
 
         // Creating Room
         // const newRoom = await Room.create({ houseOwnerId: req.user.id, ...body });
-        const newRoom = await Room.create({ houseOwnerId: req.user.id, roomImages: files, ...body });
+        const newRoom = await Room.create({ houseOwnerId: req.user.id, roomImages: files, ...req.body });
         newRoom.save();
 
         // Adding room to the HouseOwner total rooms
         houseOwner.yourRooms.push(newRoom._id);
         houseOwner.save();
 
-        // // Sending Result
+        // Message for an Email
+        let message = {
+            from: process.env.APP_EMAIL,
+            to: email,
+            subject: 'Room Creation Completed Successfull',
+            html: "<h1>Room Created Successfully</h1><br/><a href='http://localhost:5173/login'>Login</a>"
+        }
+        // Sending Email
+        SendMail(message);
+
+        // Sending Result
         res.status(201).json({ result: 'Success', data: newRoom });
 
     } catch (error) {

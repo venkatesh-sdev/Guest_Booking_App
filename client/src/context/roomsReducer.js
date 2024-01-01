@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios'
-const BASE_URL = 'http://localhost:3001'
+import URLS from '../constants/URLS';
 
 const initialState = {
     rooms: [],
@@ -11,7 +11,7 @@ const initialState = {
 
 export const apiAllRooms = createAsyncThunk('rooms/allrooms', async () => {
     try {
-        const result = await axios.get(`${BASE_URL}/room/allrooms`);
+        const result = await axios.get(URLS.apiAllRooms);
         return result.data;
     } catch (error) {
         console.log(error)
