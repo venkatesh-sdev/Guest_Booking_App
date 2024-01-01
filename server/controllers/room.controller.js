@@ -39,21 +39,23 @@ export const GetRoomController = async (req, res, next) => {
 // CreateRoom Controller
 export const CreateRoomController = async (req, res, next) => {
     try {
+
+
         // Finding the HouseOwner with userId
         const houseOwner = await User.findById(req.user.id);
 
         if (!houseOwner) return res.status(400).json({ message: "User not Found Please SignUp as User to create a Rooms" });
 
-        let files = req.files;
+        // let files = req.files;
 
-        if (files.length > 0) {
-            files = files.map(data => data.filename);
-        }
+        // if (files.length > 0) {
+        //     files = files.map(data => data.filename);
+        // }
 
 
         // Creating Room
-        // const newRoom = await Room.create({ houseOwnerId: req.user.id, ...body });
-        const newRoom = await Room.create({ houseOwnerId: req.user.id, roomImages: files, ...req.body });
+        const newRoom = await Room.create({ houseOwnerId: req.user.id, ...req.body });
+        // const newRoom = await Room.create({ houseOwnerId: req.user.id, ...req.body, roomImages: files });
         newRoom.save();
 
         // Adding room to the HouseOwner total rooms
@@ -63,7 +65,7 @@ export const CreateRoomController = async (req, res, next) => {
         // Message for an Email
         let message = {
             from: process.env.APP_EMAIL,
-            to: email,
+            to: houseOwner.email,
             subject: 'Room Creation Completed Successfull',
             html: "<h1>Room Created Successfully</h1><br/><a href='http://localhost:5173/login'>Login</a>"
         }
@@ -71,7 +73,7 @@ export const CreateRoomController = async (req, res, next) => {
         SendMail(message);
 
         // Sending Result
-        res.status(201).json({ result: 'Success', data: newRoom });
+        return res.status(201).json({ result: 'Success', data: newRoom });
 
     } catch (error) {
         // Sending Unhandled Error As Response

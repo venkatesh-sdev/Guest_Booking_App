@@ -4,8 +4,8 @@ const BASE_URL = 'http://localhost:3001';
 const URL_Generator = (route) => BASE_URL + route
 
 export default ({
-    apiRegister: URL_Generator('/auth/register'),
-    apiLogin: URL_Generator('/auth/login'),
+    apiRegister: URL_Generator('/auth/signup'),
+    apiLogin: URL_Generator('/auth/signin'),
     apiAllRooms: URL_Generator('/room/allrooms'),
     apiCreateRoom: URL_Generator('/room/create'),
     apiUpdateRoom: URL_Generator('/room/update'),
@@ -13,3 +13,5 @@ export default ({
     apiCancelRoom: URL_Generator('/room/cancelroom'),
     apiBookRoom: URL_Generator('/room/bookroom'),
 })
+
+

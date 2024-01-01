@@ -2,7 +2,8 @@
 import React, { useRef, useState } from 'react'
 import { IoCloudUploadOutline } from "react-icons/io5";
 import axios from 'axios'
-import URLS from '../constants/URLS';
+import URLS from '../constants/urls';
+import { convertToBase64 } from '../constants/base64Converter';
 
 const AddRoomPage = () => {
     // Input References
@@ -59,26 +60,32 @@ const AddRoomPage = () => {
             otherFeatures: otherFeatures,
         }
 
-        const formData = new FormData();
 
         if (data.floorNumber && data.roomName && data.numberOfBeds && data.maximumRentDays && data.minimumRentDays && data.rentPerDay) {
-            images.map(image => { formData.append('files', image) })
-            for (const [key, value] of Object.entries(data)) {
-                formData.append(`${key}`, value);
-            }
+
+            // Using File Storage
+            // const formData = new FormData();
+            // for (const [key, value] of Object.entries(data)) {
+            //     formData.append(`${key}`, value);
+            // }
+
+            // images.map(image => { formData.append('files', image) })
+
+            // Using MongoDB to Store Image
+            const base64Images = [];
+            const base64 = images.map((image) => convertToBase64(image))
+            await Promise.all(base64).then(imageData => base64Images.push(imageData));
+
+            // Request
+            const result = await axios.post(URLS.apiCreateRoom, {
+                ...data,
+                roomImages: base64Images[0]
+            }, {
+                headers: { "Authorization": `Bearer ${testToken}`, }
+            });
+            console.log(result.data)
         }
-        // const config = {
-        //     headers: { "Authorization": `Bearer ${testToken}` }
-        // };
-        const result = await axios.post(URLS.apiCreateRoom, formData, {
-            headers: { "Authorization": `Bearer ${testToken}`, }
-        });
-        console.log(result.data)
-
     }
-
-    // Logs
-    console.log(images)
 
     return (
         <div className='w-screen min-h-screen h-full bg-dark-blue p-5 text-white flex flex-col justify-center items-center'>
@@ -132,8 +139,8 @@ const AddRoomPage = () => {
                         <IoCloudUploadOutline size={30} />
                         <h1 className="text-[20px] font-medium italic">Add Images</h1>
                     </label>
-                    <div className='flex flex-wrap'>
-                        {images.map((data, index) => <div className='bg-[#373948] px-2 py-1 text-center rounded-lg flex gap-2 items-center mr-2' key={index}>
+                    <div className='flex flex-wrap gap-2'>
+                        {images.map((data, index) => <div className='bg-[#373948] px-2 py-1 text-center rounded-lg flex gap-2 items-center ' key={index}>
                             <p>{data.name}</p>
                             <button onClick={() => handleRemoveImages(index)} className='text-red-500 text-xl' >x</button>
                         </div>
@@ -153,3 +160,13 @@ const AddRoomPage = () => {
 }
 
 export default AddRoomPage
+
+
+// {
+//     progress: (progressEvent) => {
+//         if (progressEvent.lengthComputable) {
+//             console.log(progressEvent.loaded + ' ' + progressEvent.total);
+//             this.updateProgressBarValue(progressEvent);
+//         }
+//     }
+// }
