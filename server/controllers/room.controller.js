@@ -46,17 +46,18 @@ export const CreateRoomController = async (req, res, next) => {
 
         if (!houseOwner) return res.status(400).json({ message: "User not Found Please SignUp as User to create a Rooms" });
 
-        // let files = req.files;
 
+        // let files = req.files;
         // if (files.length > 0) {
         //     files = files.map(data => data.filename);
         // }
 
 
-        // Creating Room
+        // Creating Room and Store Images on MongoDb
         const newRoom = await Room.create({ houseOwnerId: req.user.id, ...req.body });
+
+        // Creating Room and Store Images in Storage
         // const newRoom = await Room.create({ houseOwnerId: req.user.id, ...req.body, roomImages: files });
-        newRoom.save();
 
         // Adding room to the HouseOwner total rooms
         houseOwner.yourRooms.push(newRoom._id);
@@ -67,7 +68,7 @@ export const CreateRoomController = async (req, res, next) => {
             from: process.env.APP_EMAIL,
             to: houseOwner.email,
             subject: 'Room Creation Completed Successfull',
-            html: "<h1>Room Created Successfully</h1><br/><a href='http://localhost:5173/login'>Login</a>"
+            html: "<h1>Room Created Successfully</h1>"
         }
         // Sending Email
         SendMail(message);

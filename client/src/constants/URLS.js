@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = 'https://wild-red-ladybug-suit.cyclic.app/';
 
 const URL_Generator = (route) => BASE_URL + route
 
