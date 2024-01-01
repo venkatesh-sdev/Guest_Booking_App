@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios';
-import URLS from '../constants/URLS';
+import URLS from '../constants/apiUrls';
 
 
 
