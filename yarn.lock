@@ -1319,6 +1319,11 @@ raw-body@2.5.1:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
+react-heroicons@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/react-heroicons/-/react-heroicons-0.0.7.tgz#d251ecf79491788bd3ad12387abff94dd28985e6"
+  integrity sha512-JItvlP77FFR91er2Q4i5XGCxjzrc1XzN6QFjwD1k0mRPBB1jy5grMWCuld7iKMg1KuZXIA4lMJR+8GDdSzY6Nw==
+
 readable-stream@^2.2.2:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.8.tgz#91125e8042bba1b9887f49345f6277027ce8be9b"

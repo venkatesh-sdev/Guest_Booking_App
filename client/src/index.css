@@ -23,10 +23,11 @@
     transform: translateX(-50%);
 }
 
-#options * {
-    background-color: #ffffff20;
-}
 
 *::-webkit-scrollbar {
     display: none;
+}
+
+.line-height{
+    line-height: 0;
 }

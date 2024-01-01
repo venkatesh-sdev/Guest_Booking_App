@@ -7,6 +7,7 @@ export default {
         'dark-blue': "#000316",
         'light-gray': '#ffffff20',
         'light-blue': '#2563eb',
+        'medium-gray': '#373948'
       },
       textColor: {
         'white': '#fff',

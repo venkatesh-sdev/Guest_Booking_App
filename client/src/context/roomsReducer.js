@@ -30,7 +30,6 @@ const roomsReducer = createSlice({
             }).addCase(apiAllRooms.fulfilled, (state, action) => {
                 state.length = action.payload.data.length;
                 state.rooms = action.payload.data;
-                console.log(state.rooms)
                 state.status = 'success';
             }).addCase(apiAllRooms.rejected, (state, action) => {
                 state.status = 'error'
@@ -38,7 +37,7 @@ const roomsReducer = createSlice({
     }
 })
 
-export const getRooms = (state) => state.rooms
+export const getRooms = (state) => state.rooms.rooms
 
 // export const { } = roomsReducer.actions;
 

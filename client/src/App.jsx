@@ -7,11 +7,19 @@ import { HomePage, RegisterPage, LoginPage, AddRoomPage } from './pages';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserDetails } from './context/authReducer';
 import Page404 from './pages/Page404';
+import { apiAllRooms, getRooms } from './context/roomsReducer';
 
 
 const App = () => {
   const user = useSelector(getUserDetails);
   const dispatch = useDispatch();
+  const roomsData = useSelector(getRooms);
+  useEffect(() => {
+    if (roomsData.status === 'success')
+      return;
+    else
+      dispatch(apiAllRooms());
+  }, [dispatch, roomsData.status])
 
   // if (user.isLoggedIn) {
   //   return (
