@@ -15,9 +15,10 @@ const HomePage = () => {
 
 
     return (
-        <div className='bg-dark-blue w-screen h-screen text-white'>
+        <div className='bg-dark-blue flex justify-center items-center w-screen h-screen text-white'>
             {/* Nav */}
             {/* Search and Filter */}
+            <h1 className='text-2xl font-bold italic'>Home</h1>
             {/* Rooms */}
         </div>
     )
