@@ -9,7 +9,8 @@ import URLS from '../constants/apiUrls';
 const initialState = {
     user: null,
     token: localStorage.getItem('userToken') || null,
-    status: 'idle'
+    status: 'idle',
+    isLoggedIn: false
 }
 
 export const apiRegister = createAsyncThunk('auth/Register', async (data) => {

@@ -13,21 +13,21 @@ const App = () => {
   const user = useSelector(getUserDetails);
   const dispatch = useDispatch();
 
-  if (user.isLoggedIn) {
-    return (
-      <Routes>
-        <Route path='/' element={<HomePage />} />
-        <Route path='/addroom' element={<AddRoomPage />} />
-        <Route path='*' element={<Page404 />} />
-      </Routes>
-    );
-  }
+  // if (user.isLoggedIn) {
+  //   return (
+  //     <Routes>
+  //       <Route path='/' element={<HomePage />} />
+  //       <Route path='/addroom' element={<AddRoomPage />} />
+  //       <Route path='*' element={<Page404 />} />
+  //     </Routes>
+  //   );
+  // }
 
 
 
   return (
     <Routes>
-      <Route path='/' element={<LoginPage />} />
+      <Route path='/' element={<HomePage />} />
       <Route path='/login' element={<LoginPage />} />
       <Route path='/register' element={<RegisterPage />} />
       <Route path='/addroom' element={<AddRoomPage />} />
