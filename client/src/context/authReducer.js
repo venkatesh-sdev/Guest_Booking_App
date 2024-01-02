@@ -7,10 +7,10 @@ import URLS from '../constants/apiUrls';
 
 
 const initialState = {
-    user: null,
-    token: localStorage.getItem('userToken') || null,
-    status: 'idle',
-    isLoggedIn: false
+    user: JSON.parse(localStorage.getItem('user')) || null,
+    token: localStorage.getItem('token') || null,
+    isLoggedIn: localStorage.getItem('isLoggedIn') || "false",
+    status: 'idle'
 }
 
 export const apiRegister = createAsyncThunk('auth/Register', async (data) => {
@@ -40,14 +40,13 @@ const AuthReducer = createSlice({
     reducers: {
 
         Logout: (state) => {
-            localStorage.removeItem('userToken');
+            localStorage.removeItem('token');
             localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('userDetail');
-            localStorage.removeItem('userType');
+            localStorage.removeItem('user')
             state.isLoggedIn = false
-            state.userDetail = {};
+            state.user = null;
             state.token = null;
-            state.userType = null;
+            state.status = 'logout'
         }
     },
     extraReducers: (builder) => {
@@ -58,8 +57,6 @@ const AuthReducer = createSlice({
             })
             .addCase(apiRegister.fulfilled, (state, action) => {
                 state.status = 'success';
-                console.log(action.payload)
-
             }).addCase(apiRegister.rejected, (state, action) => {
                 state.status = 'error';
             })
@@ -70,6 +67,14 @@ const AuthReducer = createSlice({
             .addCase(apiLogin.fulfilled, (state, action) => {
                 state.status = 'success';
                 console.log(action.payload)
+                if (action.payload.token) {
+                    localStorage.setItem('token', action.payload.token);
+                    localStorage.setItem('isLoggedIn', "true")
+                    localStorage.setItem('user', JSON.stringify(action.payload.user));
+                    state.isLoggedIn = "true"
+                    state.token = action.payload.token
+                    state.user = action.payload.user;
+                }
             }).addCase(apiLogin.rejected, (state, action) => {
                 state.status = 'error';
             })
@@ -82,20 +87,11 @@ export const {
 } = AuthReducer.actions;
 
 
-export const getUserDetails = (state) => state.auth;
+export const getUser = (state) => state.auth;
+export const getToken = (state) => state.auth.token;
 
 
 export default AuthReducer.reducer;
 
 
 
-// if (action.payload.userToken) {
-//     localStorage.setItem('userToken', action.payload.userToken);
-//     localStorage.setItem('isLoggedIn', action.payload.isLoggedIn);
-//     localStorage.setItem('userDetail', action.payload.userDetail);
-//     localStorage.setItem('userType', action.payload.userType);
-//     state.isLoggedIn = true
-//     state.userDetail = action.payload.userDetail;
-//     state.token = action.payload.userToken
-//     state.userType = action.payload.userType
-// }

@@ -6,9 +6,13 @@ import { HiHome } from "react-icons/hi2";
 import { FiSearch } from "react-icons/fi";
 
 import ProfilePlaceHolder from '../assets/profile_placeholder.png';
+import { useNavigate } from 'react-router-dom';
+import { Logout, getUser } from '../context/authReducer';
 
 const HomePage = () => {
     const roomsData = useSelector(getRooms);
+    const { user, isLoggedIn } = useSelector(getUser);
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     useEffect(() => {
         if (roomsData.status === 'success')
@@ -18,6 +22,7 @@ const HomePage = () => {
     }, [dispatch, roomsData.status])
 
     console.log(roomsData)
+    console.log(isLoggedIn)
 
     return (
         <div className='bg-dark-blue w-screen h-full min-h-screen text-white'>
@@ -32,24 +37,29 @@ const HomePage = () => {
                         <h1 className='text-xl  font-medium p-0'>Homical</h1>
                     </div>
                     {/* Search and Filter */}
-                    <div className='border-transparent hidden sm:flex w-full border-l-slate-500 border-r-slate-500 border px-5  justify-between items-center'>
+                    <div className='border-transparent hidden md:flex w-full border-l-slate-500 border-r-slate-500 border px-5  justify-between items-center'>
                         <div className='flex gap-2 items-center'>
                             <FiSearch color='#fff' size={24} />
-                            <input type="text" className='bg-transparent outline-none ring-0 border-none py-1  lg:w-[500px] text-sm' placeholder='Search for Homes,Apartments,... ' />
+                            <input type="text" className='bg-transparent outline-none ring-0 border-none py-1  lg:w-[300px] text-sm' placeholder='Search for Homes,Apartments,... ' />
                         </div>
-                        <div>
-                            <button className='px-5 py-2 bg-light-blue rounded-md text-center'>
+                        {isLoggedIn === 'false' ? <div className='flex gap-2'>
+                            <button onClick={() => navigate('/login')} className='px-5 py-2 bg-light-blue rounded-md text-center'>
                                 Login
                             </button>
-                        </div>
+                            <button onClick={() => navigate('/register')} className='px-5 py-2 bg-light-blue rounded-md text-center'>
+                                Register
+                            </button>
+                        </div> : <button onClick={() => { dispatch(Logout()); navigate('/login') }} className='px-5 py-2 bg-light-blue rounded-md text-center'>
+                            Logout
+                        </button>}
                     </div>
                     <div className='pl-5'>
-                        <button className='w-12 h-12 rounded-full overflow-hidden'>
+                        <button onClick={() => { isLoggedIn === 'true' ? navigate('dashboard') : navigate('/login') }} className='w-12 h-12 rounded-full overflow-hidden'>
                             <img className='w-full h-full object-cover' src={ProfilePlaceHolder} />
                         </button>
                     </div>
                 </div>
-                <div className='sm:hidden flex gap-2 items-center py-2'>
+                <div className='md:hidden flex gap-2 items-center py-2'>
                     <FiSearch color='#fff' size={24} />
                     <input type="text" className='bg-transparent outline-none ring-0 border-none py-1 w-full text-sm' placeholder='Search for Homes,Apartments,... ' />
                 </div>

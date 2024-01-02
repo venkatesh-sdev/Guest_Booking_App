@@ -1,14 +1,24 @@
 /* eslint-disable no-unused-vars */
-import React, { useRef } from 'react'
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { apiLogin } from '../context/authReducer';
+import { apiLogin, getUser } from '../context/authReducer';
 
 const LoginPage = () => {
+
+    const user = useSelector(getUser);
     const emailRef = useRef();
     const passwordRef = useRef();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (user.status === 'success') {
+            navigate('/')
+            emailRef.current.value = '';
+            passwordRef.current.value = '';
+        }
+    }, [navigate, user.status])
 
     const handleLogin = () => {
         const data = {
@@ -18,6 +28,7 @@ const LoginPage = () => {
         if (data.email && data.password) {
             dispatch(apiLogin(data))
         }
+
     }
 
     return (
@@ -35,10 +46,14 @@ const LoginPage = () => {
                 <div className='flex justify-end items-center my-3'>
                     <button className='text-blue-500 text-md hover:underline decoration-blue-500 '>Forgot Password?</button>
                 </div>
-                <button onClick={handleLogin} className='w-full bg-blue-700 text-white rounded-lg text-center py-2 my-2 transition-all ease-in hover:bg-blue-800 duration-200'>Login</button>
+                <button 
+                onClick={handleLogin} 
+                className='w-full bg-blue-700 text-white rounded-lg text-center py-2 my-2 transition-all ease-in hover:bg-blue-800 duration-200'>
+                {user.status==='pending'?"...please wait":"Login"}
+                </button>
                 <p className="text-sm font-light mt-2 text-gray-400">
                     Don’t have an account yet?
-                    <button onClick={() => navigate('/register')} className="font-medium  hover:underline text-blue-500" >Sign up</button>
+                    <button onClick={() => navigate('/register')} className="font-medium  hover:underline text-blue-500" >Sign Up</button>
                 </p>
             </div>
         </div>

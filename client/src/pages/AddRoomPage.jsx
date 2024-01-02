@@ -4,8 +4,16 @@ import { IoClose, IoCloudUploadOutline } from "react-icons/io5";
 import axios from 'axios'
 import URLS from '../constants/apiUrls.js';
 import { convertToBase64 } from '../constants/base64Converter';
+import { useSelector } from 'react-redux';
+import { getToken } from '../context/authReducer.js';
+import { Navigate } from 'react-router-dom';
 
 const AddRoomPage = () => {
+
+    const token = useSelector(getToken);
+
+
+
     // Input References
     const roomNameRef = useRef();
     const floorNumberRef = useRef();
@@ -45,7 +53,7 @@ const AddRoomPage = () => {
         setImages(removedImages)
     }
 
-    const testToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1OTE1ZTlmNTMwYzg0ODIxNjU4YTQ1YyIsImlhdCI6MTcwNDA0OTMyMH0.odlyjvDuDZ8ZnsA1FDtdmoXTs0RCcIydk68cBbLKbt0';
+
 
     const createRoom = async () => {
         const data = {
@@ -79,7 +87,7 @@ const AddRoomPage = () => {
                 ...data,
                 roomImages: base64Images[0]
             }, {
-                headers: { "Authorization": `Bearer ${testToken}`, }
+                headers: { "Authorization": `Bearer ${token}`, }
             });
             console.log(result.data)
             // Reseting Data
@@ -92,6 +100,10 @@ const AddRoomPage = () => {
             // setOtherFeatures([]);
             // setImages([]);
         }
+    }
+
+    if (!token) {
+        return <Navigate to={'/login'} />
     }
 
     return (

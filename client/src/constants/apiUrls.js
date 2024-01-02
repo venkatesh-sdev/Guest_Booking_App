@@ -1,7 +1,11 @@
 /* eslint-disable no-undef */
 const BASE_URL = 'https://wild-red-ladybug-suit.cyclic.app';
 
-const URL_Generator = (route) => BASE_URL + route
+const URL_Generator = (route) => BASE_URL + route;
+
+export const assetsUrl = (fileName) => {
+    return BASE_URL + '/assets/' + fileName
+};
 
 export default ({
     apiRegister: URL_Generator('/auth/signup'),

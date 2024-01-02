@@ -5,7 +5,6 @@ import URLS from '../constants/apiUrls';
 
 const initialState = {
     rooms: [],
-    length: 0,
     status: 'idle'
 }
 
@@ -28,9 +27,8 @@ const roomsReducer = createSlice({
             .addCase(apiAllRooms.pending, (state, action) => {
                 state.status = 'pending';
             }).addCase(apiAllRooms.fulfilled, (state, action) => {
-                state.length = action.payload.data.length;
-                state.rooms = action.payload.data;
                 state.status = 'success';
+                state.rooms = action.payload.data;
             }).addCase(apiAllRooms.rejected, (state, action) => {
                 state.status = 'error'
             })
