@@ -69,6 +69,13 @@ const AuthReducer = createSlice({
             })
             .addCase(apiLogin.fulfilled, (state, action) => {
                 state.status = 'loggedin';
+                console.log(action.payload)
+
+                if(action.payload?.message){
+                    state.status = 'user not available';
+                    return;
+                }
+
                 if (action.payload.token) {
                     localStorage.setItem('token', action.payload.token);
                     localStorage.setItem('isLoggedIn', "true")

@@ -28,7 +28,7 @@ const roomsReducer = createSlice({
                 state.status = 'pending';
             }).addCase(apiAllRooms.fulfilled, (state, action) => {
                 state.status = 'success';
-                state.rooms = action.payload.data;
+                state.rooms = action.payload?.data;
             }).addCase(apiAllRooms.rejected, (state, action) => {
                 state.status = 'error'
             })

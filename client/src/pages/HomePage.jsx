@@ -21,8 +21,6 @@ const HomePage = () => {
             dispatch(apiAllRooms());
     }, [dispatch, roomsData.status])
 
-    console.log(roomsData)
-    console.log(isLoggedIn)
 
     return (
         <div className='bg-dark-blue w-screen h-full min-h-screen text-white'>

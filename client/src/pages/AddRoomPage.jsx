@@ -90,6 +90,7 @@ const AddRoomPage = () => {
                 headers: { "Authorization": `Bearer ${token}`, }
             });
             console.log(result.data)
+            
             // Reseting Data
             // roomNameRef.current.value = '';
             // floorNumberRef.current.value = '';

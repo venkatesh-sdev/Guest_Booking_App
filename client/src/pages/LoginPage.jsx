@@ -17,7 +17,12 @@ const LoginPage = () => {
             dispatch(resetStatus());
             navigate('/')
         }
-    }, [dispatch, navigate, user.isLoggedIn])
+        if (user.status === 'user not available') {
+            alert('User Not Exists');
+            navigate('/register')
+        }
+
+    }, [dispatch, navigate, user.isLoggedIn, user.status])
 
     const handleLogin = () => {
         const data = {
@@ -45,10 +50,10 @@ const LoginPage = () => {
                 <div className='flex justify-end items-center my-3'>
                     <button className='text-blue-500 text-md hover:underline decoration-blue-500 '>Forgot Password?</button>
                 </div>
-                <button 
-                onClick={handleLogin} 
-                className='w-full bg-blue-700 text-white rounded-lg text-center py-2 my-2 transition-all ease-in hover:bg-blue-800 duration-200'>
-                {user.status==='pending'?"...please wait":"Login"}
+                <button
+                    onClick={handleLogin}
+                    className='w-full bg-blue-700 text-white rounded-lg text-center py-2 my-2 transition-all ease-in hover:bg-blue-800 duration-200'>
+                    {user.status === 'pending' ? "...please wait" : "Login"}
                 </button>
                 <p className="text-sm font-light mt-2 text-gray-400">
                     Don’t have an account yet?
