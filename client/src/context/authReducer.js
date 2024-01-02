@@ -38,12 +38,15 @@ const AuthReducer = createSlice({
     name: 'auth',
     initialState,
     reducers: {
+        resetStatus: (state) => {
+            state.status = 'idle';
+        },
 
         Logout: (state) => {
             localStorage.removeItem('token');
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('user')
-            state.isLoggedIn = false
+            state.isLoggedIn = 'false'
             state.user = null;
             state.token = null;
             state.status = 'logout'
@@ -56,7 +59,7 @@ const AuthReducer = createSlice({
                 state.status = 'pending';
             })
             .addCase(apiRegister.fulfilled, (state, action) => {
-                state.status = 'success';
+                state.status = 'registered';
             }).addCase(apiRegister.rejected, (state, action) => {
                 state.status = 'error';
             })
@@ -65,8 +68,7 @@ const AuthReducer = createSlice({
                 state.status = 'pending';
             })
             .addCase(apiLogin.fulfilled, (state, action) => {
-                state.status = 'success';
-                console.log(action.payload)
+                state.status = 'loggedin';
                 if (action.payload.token) {
                     localStorage.setItem('token', action.payload.token);
                     localStorage.setItem('isLoggedIn', "true")
@@ -83,6 +85,7 @@ const AuthReducer = createSlice({
 
 
 export const {
+    resetStatus,
     Logout
 } = AuthReducer.actions;
 

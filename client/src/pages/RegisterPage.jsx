@@ -1,17 +1,26 @@
 /* eslint-disable no-unused-vars */
-import React, { useRef } from 'react'
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { apiRegister } from '../context/authReducer';
+import { apiRegister, getUser, resetStatus } from '../context/authReducer';
 
 const RegisterPage = () => {
-
+    const user = useSelector(getUser)
     const dispatch = useDispatch();
-
     const emailRef = useRef();
     const passwordRef = useRef();
     const confirmPasswordRef = useRef();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user.status === 'registered') {
+            dispatch(resetStatus());
+            navigate('/login');
+            console.log('registered')
+        }
+    }, [dispatch, navigate, user.status])
+
+
 
     const handleRegister = async () => {
 
@@ -43,7 +52,7 @@ const RegisterPage = () => {
                     <label htmlFor="confirmpassword" className='text-sm font-medium  '>Confirm Password</label>
                     <input ref={confirmPasswordRef} id='confirmpassword' type="password" placeholder='********' className='bg-light-gray   p-2 rounded-lg border-none outline-none' />
                 </div>
-                <button onClick={handleRegister} className='w-full bg-blue-700 text-white rounded-lg text-center py-2 my-2 transition-all ease-in hover:bg-blue-800 duration-200'>RegisterPage</button>
+                <button onClick={handleRegister} className='w-full bg-blue-700 text-white rounded-lg text-center py-2 my-2 transition-all ease-in hover:bg-blue-800 duration-200'>{user.status === 'pending' ? "...please wait" : "Register"}</button>
                 <p className="text-sm font-light mt-2 text-gray-400">
                     Alreay Have An Account!
                     <button onClick={() => navigate('/login')} className="font-medium  hover:underline text-blue-500 ml-2" >Sign In</button>

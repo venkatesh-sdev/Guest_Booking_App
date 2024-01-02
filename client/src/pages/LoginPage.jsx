@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { apiLogin, getUser } from '../context/authReducer';
+import { apiLogin, getUser, resetStatus } from '../context/authReducer';
 
 const LoginPage = () => {
 
@@ -13,12 +13,11 @@ const LoginPage = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (user.status === 'success') {
+        if (user.isLoggedIn === 'true') {
+            dispatch(resetStatus());
             navigate('/')
-            emailRef.current.value = '';
-            passwordRef.current.value = '';
         }
-    }, [navigate, user.status])
+    }, [dispatch, navigate, user.isLoggedIn])
 
     const handleLogin = () => {
         const data = {

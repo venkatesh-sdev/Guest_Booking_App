@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { apiAllRooms, getRooms } from '../context/roomsReducer';
 import { HiHome } from "react-icons/hi2";
@@ -49,7 +49,10 @@ const HomePage = () => {
                             <button onClick={() => navigate('/register')} className='px-5 py-2 bg-light-blue rounded-md text-center'>
                                 Register
                             </button>
-                        </div> : <button onClick={() => { dispatch(Logout()); navigate('/login') }} className='px-5 py-2 bg-light-blue rounded-md text-center'>
+                        </div> : <button onClick={() => {
+                            dispatch(Logout());
+                            navigate('/login');
+                        }} className='px-5 py-2 bg-light-blue rounded-md text-center'>
                             Logout
                         </button>}
                     </div>
