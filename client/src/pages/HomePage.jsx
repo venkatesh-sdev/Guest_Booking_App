@@ -19,7 +19,9 @@ const HomePage = () => {
             return;
         else
             dispatch(apiAllRooms());
-    }, [dispatch, roomsData.status])
+    }, [dispatch, roomsData.status]);
+
+    const loadingAni = [1, 2, 3, 4, 5, 6, 7, 8];
 
 
     return (
@@ -56,7 +58,7 @@ const HomePage = () => {
                     </div>
                     <div className='pl-5'>
                         <button onClick={() => { isLoggedIn === 'true' ? navigate('dashboard') : navigate('/login') }} className='w-12 h-12 rounded-full overflow-hidden'>
-                            <img className='w-full h-full object-cover' src={ProfilePlaceHolder} />
+                            {user?.profilePic ? <img className='w-full h-full ojbect-cover' src={user.profilePic} /> : <img className='w-full h-full object-cover' src={ProfilePlaceHolder} />}
                         </button>
                     </div>
                 </div>
@@ -93,7 +95,21 @@ const HomePage = () => {
                                     </div>
                                 </div>
                             </div>
-                        ) : <div>Loading</div>
+                        ) : loadingAni.map((data, index) => <div key={index} className='flex flex-col bg-light-gray rounded-2xl p-2 ' >
+                            <div className='h-56 overflow-hidden rounded-lg'>
+                                <div className='w-full h-full bg-medium-gray rounded-lg animate-pulse'></div>
+                            </div>
+                            <div className='px-2 flex justify-between items-end py-2'>
+                                <div className=' gap-1 flex flex-col'>
+                                    <h1 className='w-[100px] h-[24px] bg-medium-gray rounded-lg animate-pulse'></h1>
+                                    <p className='text-light-white text-xs w-[150px] h-[16px] bg-medium-gray rounded-lg animate-pulse'></p>
+                                </div>
+                                <div className='flex gap-1 items-center'>
+                                    <p className='w-[50px] h-[24px] bg-medium-gray rounded-lg animate-pulse'></p>
+                                    <p className='text-light-white self-end text-[10px] italic'>/ PerDay</p>
+                                </div>
+                            </div>
+                        </div>)
                     }
                 </div>
             </div>

@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { IoClose, IoCloudUploadOutline } from "react-icons/io5";
 import axios from 'axios'
 import URLS from '../constants/apiUrls.js';
-import { convertToBase64 } from '../constants/base64Converter';
+import { convertToBase64 } from '../constants/base64Converter.js';
 import { useSelector } from 'react-redux';
 import { getToken } from '../context/authReducer.js';
 import { Navigate } from 'react-router-dom';
@@ -11,9 +11,9 @@ import { Navigate } from 'react-router-dom';
 const AddRoomPage = () => {
 
     const token = useSelector(getToken);
-
-
-
+    const [message, setMessage] = useState('Add Room');
+    const [progress, setProgress] = useState({ started: false, pc: 0 });
+  
     // Input References
     const roomNameRef = useRef();
     const floorNumberRef = useRef();
@@ -56,50 +56,64 @@ const AddRoomPage = () => {
 
 
     const createRoom = async () => {
-        const data = {
-            roomName: roomNameRef.current.value,
-            floorNumber: floorNumberRef.current.value,
-            numberOfBeds: noOfBedsRef.current.value,
-            rentPerDay: rentPerDayRef.current.value,
-            minimumRentDays: minNoDays.current.value,
-            maximumRentDays: maxNoDays.current.value,
-            otherFeatures: otherFeatures,
-        }
+        try {
+            setProgress(prev => ({ ...prev, started: true }))
+            const data = {
+                roomName: roomNameRef.current.value,
+                floorNumber: floorNumberRef.current.value,
+                numberOfBeds: noOfBedsRef.current.value,
+                rentPerDay: rentPerDayRef.current.value,
+                minimumRentDays: minNoDays.current.value,
+                maximumRentDays: maxNoDays.current.value,
+                otherFeatures: otherFeatures,
+            }
 
 
-        if (data.floorNumber && data.roomName && data.numberOfBeds && data.maximumRentDays && data.minimumRentDays && data.rentPerDay) {
+            if (data.floorNumber && data.roomName && data.numberOfBeds && data.maximumRentDays && data.minimumRentDays && data.rentPerDay) {
 
-            // Using File Storage
-            // const formData = new FormData();
-            // for (const [key, value] of Object.entries(data)) {
-            //     formData.append(`${key}`, value);
-            // }
+                // Using File Storage
+                // const formData = new FormData();
+                // for (const [key, value] of Object.entries(data)) {
+                //     formData.append(`${key}`, value);
+                // }
 
-            // images.map(image => { formData.append('files', image) })
+                // images.map(image => { formData.append('files', image) })
 
-            // Using MongoDB to Store Image
-            const base64Images = [];
-            const base64 = images.map((image) => convertToBase64(image))
-            await Promise.all(base64).then(imageData => base64Images.push(imageData));
+                // Using MongoDB to Store Image
+                const base64Images = [];
+                const base64 = images.map((image) => convertToBase64(image))
+                await Promise.all(base64).then(imageData => base64Images.push(imageData));
 
-            // Request
-            const result = await axios.post(URLS.apiCreateRoom, {
-                ...data,
-                roomImages: base64Images[0]
-            }, {
-                headers: { "Authorization": `Bearer ${token}`, }
-            });
-            console.log(result.data)
-            
-            // Reseting Data
-            // roomNameRef.current.value = '';
-            // floorNumberRef.current.value = '';
-            // noOfBedsRef.current.value = '';
-            // rentPerDayRef.current.value = '';
-            // minNoDays.current.value = '';
-            // maxNoDays.current.value = '';
-            // setOtherFeatures([]);
-            // setImages([]);
+                // Request
+                const result = await axios.post(URLS.apiCreateRoom, {
+                    ...data,
+                    roomImages: base64Images[0]
+                }, {
+                    onUploadProgress: (progressEvent) => {
+                        setProgress(prev => ({ ...prev, pc: progressEvent.progress * 100 }))
+                    }, headers: { "Authorization": `Bearer ${token}`, }
+                });
+                console.log(result.data)
+                setMessage('Room Added Successfully')
+                setTimeout(() => {
+                    setMessage('Add Room')
+                }, 2000)
+
+                setProgress(prev => ({ pc: 0, started: false }))
+
+                // Reseting Data
+                // roomNameRef.current.value = '';
+                // floorNumberRef.current.value = '';
+                // noOfBedsRef.current.value = '';
+                // rentPerDayRef.current.value = '';
+                // minNoDays.current.value = '';
+                // maxNoDays.current.value = '';
+                // setOtherFeatures([]);
+                // setImages([]);
+            }
+        } catch (error) {
+            setMessage("Error On Adding")
+            console.log(error)
         }
     }
 
@@ -150,7 +164,6 @@ const AddRoomPage = () => {
                         <option value="AC">AC</option>
                         <option value="Fridge">Fridge</option>
                         <option value="Washing Machine">Washing Machine</option>
-                        <option value="Tv">Tv</option>
                         <option value="Sofa">Sofa</option>
                     </select>
                     <div className='flex flex-wrap'>
@@ -183,7 +196,13 @@ const AddRoomPage = () => {
                         ref={imagesRef}
                         type="file" accept='image/x-png,image/gif,image/jpeg' id='pictures' multiple className='hidden' />
                 </div>
-                <button onClick={createRoom} className='bg-blue-700 w-full p-2 text-center rounded-lg mt-3'>Add Room</button>
+
+                {progress.started && <div className="w-full relative rounded-full h-5 bg-gray-700">
+                    <p className='absolute top-[-1px] left-1/2 -translate-x-[50%]'>{Math.round(progress.pc)}%</p>
+                    <div className="bg-blue-600 flex justify-center items-center h-4 rounded-full" style={{ width: progress.pc + '%' }}></div>
+                </div>}
+
+                <button onClick={createRoom} className='bg-blue-700 w-full p-2 text-center rounded-lg mt-3'>{message}</button>
 
             </div>
         </div>
