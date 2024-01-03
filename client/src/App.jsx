@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from './context/authReducer';
 import Page404 from './pages/Page404';
 import { apiAllRooms, getRooms } from './context/roomsReducer';
+import AddRoomPage from './components/AddRoomPage';
 
 
 const App = () => {
@@ -40,6 +41,7 @@ const App = () => {
       <Route path='/register' element={<RegisterPage />} />
       <Route path='/room/:id' element={<RoomDetailsPage />} />
       <Route path='/dashboard' element={<DashBoardPage />} />
+      <Route path='/addroom' element={<AddRoomPage />} />
       <Route path='*' element={<Page404 />} />
     </Routes>
   )

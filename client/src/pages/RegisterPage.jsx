@@ -46,9 +46,9 @@ const RegisterPage = () => {
                     <label htmlFor="username" className='text-sm font-medium  '>UserName</label>
                     <input ref={userNameRef} id='username' type="text" placeholder='Enter UserName' className='bg-light-gray  p-2 rounded-lg border-none outline-none' />
                 </div>
-                <div className='flex flex-col gap-2 my-2 mt-7'>
-                    <label htmlFor="email" className='text-sm font-medium  '>Your Email</label>
-                    <input ref={emailRef} id='email' type="email" placeholder='Enter Your Email' className='bg-light-gray  p-2 rounded-lg border-none outline-none' />
+                <div className='flex flex-col gap-2 my-3'>
+                    <label htmlFor="email" className='text-sm font-medium  '> Email</label>
+                    <input ref={emailRef} id='email' type="email" placeholder='Enter  Email' className='bg-light-gray  p-2 rounded-lg border-none outline-none' />
                 </div>
                 <div className='flex flex-col gap-2 my-3'>
                     <label htmlFor="password" className='text-sm font-medium  '>Password</label>

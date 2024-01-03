@@ -42,6 +42,7 @@ const roomSchema = new mongoose.Schema({
             type: String,
         }
     ],
+    address: { type: String, required: true },
     isAvailable: {
         type: Boolean,
         default: true,

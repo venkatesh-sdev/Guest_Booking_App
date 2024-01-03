@@ -13,7 +13,7 @@ const AddRoomPage = () => {
     const token = useSelector(getToken);
     const [message, setMessage] = useState('Add Room');
     const [progress, setProgress] = useState({ started: false, pc: 0 });
-  
+
     // Input References
     const roomNameRef = useRef();
     const floorNumberRef = useRef();
@@ -22,6 +22,7 @@ const AddRoomPage = () => {
     const minNoDays = useRef();
     const maxNoDays = useRef();
     const imagesRef = useRef();
+    const addressRef = useRef();
 
     // States
     const [otherFeatures, setOtherFeatures] = useState([]);
@@ -66,6 +67,7 @@ const AddRoomPage = () => {
                 minimumRentDays: minNoDays.current.value,
                 maximumRentDays: maxNoDays.current.value,
                 otherFeatures: otherFeatures,
+                address: addressRef.current.value
             }
 
 
@@ -174,10 +176,13 @@ const AddRoomPage = () => {
                         )}
                     </div>
                 </div>
-
+                <div className='flex flex-col gap-2'>
+                    <label htmlFor='address'>Address</label>
+                    <textarea ref={addressRef} className='text-md px-2 py-2 rounded-lg bg-white bg-opacity-10 ring-0 shadow-none' id="address" cols="30" rows="2"></textarea>
+                </div>
                 <div className='flex flex-col gap-2 mt-2'>
                     <h1>Add Room Images</h1>
-                    <label htmlFor="pictures" className='w-full cursor-pointer flex justify-center items-center h-20 rounded-lg bg-medium-gray gap-2'>
+                    <label htmlFor="pictures" className='w-full cursor-pointer flex justify-center items-center h-12 rounded-lg bg-medium-gray gap-2'>
                         <IoCloudUploadOutline size={30} />
                         <h1 className="text-[20px] font-medium italic">Add Images</h1>
                     </label>
