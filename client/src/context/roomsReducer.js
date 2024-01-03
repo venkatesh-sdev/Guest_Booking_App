@@ -40,3 +40,4 @@ export const getRooms = (state) => state.rooms.rooms
 // export const { } = roomsReducer.actions;
 
 export default roomsReducer.reducer;
+
