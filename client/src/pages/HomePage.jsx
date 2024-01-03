@@ -32,9 +32,9 @@ const HomePage = () => {
             >
                 {/* Nav */}
                 <div className='flex justify-between items-center'>
-                    <div className='flex gap-2 pr-5'>
-                        <HiHome className='text-blue-500' size={28} />
-                        <h1 className='text-xl  font-medium p-0'>Homical</h1>
+                    <div className='flex gap-2 pr-5 items-center '>
+                        <HiHome className='text-blue-500 ' size={28} />
+                        <h1 className='text-xl pt-2 font-medium p-0'>Homical</h1>
                     </div>
                     {/* Search and Filter */}
                     <div className='border-transparent hidden md:flex w-full border-l-slate-500 border-r-slate-500 border px-5  justify-between items-center'>
