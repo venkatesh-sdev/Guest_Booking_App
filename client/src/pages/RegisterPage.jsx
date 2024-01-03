@@ -7,6 +7,7 @@ import { apiRegister, getUser, resetStatus } from '../context/authReducer';
 const RegisterPage = () => {
     const user = useSelector(getUser)
     const dispatch = useDispatch();
+    const userNameRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
     const confirmPasswordRef = useRef();
@@ -26,6 +27,7 @@ const RegisterPage = () => {
 
         if (confirmPasswordRef.current.value === passwordRef.current.value) {
             const data = {
+                userName: userNameRef.current.value,
                 email: emailRef.current.value,
                 password: passwordRef.current.value,
             }
@@ -40,6 +42,10 @@ const RegisterPage = () => {
 
             <div className='bg-light-gray px-6 py-5 rounded-xl  sm:w-[400px]'>
                 <h1 className='text-2xl font-bold '>Create Your Account</h1>
+                <div className='flex flex-col gap-2 my-2 mt-7'>
+                    <label htmlFor="username" className='text-sm font-medium  '>UserName</label>
+                    <input ref={userNameRef} id='username' type="text" placeholder='Enter UserName' className='bg-light-gray  p-2 rounded-lg border-none outline-none' />
+                </div>
                 <div className='flex flex-col gap-2 my-2 mt-7'>
                     <label htmlFor="email" className='text-sm font-medium  '>Your Email</label>
                     <input ref={emailRef} id='email' type="email" placeholder='Enter Your Email' className='bg-light-gray  p-2 rounded-lg border-none outline-none' />

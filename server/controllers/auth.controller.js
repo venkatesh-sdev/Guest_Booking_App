@@ -9,7 +9,7 @@ import SendEmail from '../utils/email.js';
 export const signUpController = async (req, res) => {
     try {
         console.log(req.body)
-        const { email, password } = req.body;
+        const { userName, email, password } = req.body;
         // Check User Is Already Exits
         const checkUser = await User.findOne({ email });
         if (checkUser) return res.status(200).json({ message: "The Email Already Exist" })
@@ -21,7 +21,7 @@ export const signUpController = async (req, res) => {
 
 
         // Creating a User 
-        const user = await User.create({ email, password: hashedPassword });
+        const user = await User.create({ userName, email, password: hashedPassword });
         // Saving the User to Db
         user.save();
 

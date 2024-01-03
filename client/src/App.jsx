@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { Route, Routes } from 'react-router-dom';
-import { HomePage, RegisterPage, LoginPage, AddRoomPage, RoomDetailsPage, DashBoardPage } from './pages';
+import { HomePage, RegisterPage, LoginPage, RoomDetailsPage, DashBoardPage } from './pages';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from './context/authReducer';
 import Page404 from './pages/Page404';
