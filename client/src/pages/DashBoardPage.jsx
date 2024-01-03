@@ -39,7 +39,7 @@ const DashBoardPage = () => {
             </div>
             {/* Nav */}
             <nav className='sm:px-[100px] px-2 py-4 flex gap-10 border border-transparent border-b-gray-600'>
-                {navigations.map(data => <button onClick={() => setNavigationData(data)} key={data.navigationName} className={`text-lg ${data.navigationName === navigationData.navigationName ? "decoration-blue-600":"decoration-transparent opacity-50"} hover:opacity-100 underline transition-all duration-500 underline-offset-[22px]`}>{data.navigationName}</button>)}
+                {navigations.map(data => <button onClick={() => setNavigationData(data)} key={data.navigationName} className={`text-lg ${data.navigationName === navigationData.navigationName ? "decoration-blue-600" : "decoration-transparent opacity-50"} hover:opacity-100 underline transition-all duration-700 underline-offset-[22px]`}>{data.navigationName}</button>)}
             </nav>
         </div>
     )
