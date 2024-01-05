@@ -8,6 +8,8 @@ import { FiSearch } from "react-icons/fi";
 import ProfilePlaceHolder from '../assets/profile_placeholder.png';
 import { useNavigate } from 'react-router-dom';
 import { Logout, getUser } from '../context/authReducer';
+import RoomCard from '../components/RoomCard';
+import LoadingCard from '../components/LoadingCard';
 
 const HomePage = () => {
     const roomsData = useSelector(getRooms);
@@ -78,38 +80,10 @@ const HomePage = () => {
                 >
                     {
                         roomsData.length > 0 ? roomsData.map(room =>
-                            <div key={room._id} className='flex flex-col bg-light-gray rounded-2xl p-2' >
-                                <div className='h-56 overflow-hidden rounded-lg'>
-                                    {
-                                        room.roomImages.length > 0 ? <img className='w-full h-full object-cover' src={room.roomImages[0]} /> : <img className='w-full h-full object-cover' src={ProfilePlaceHolder} />
-                                    }
-                                </div>
-                                <div className='px-2 flex justify-between items-end py-2'>
-                                    <div className=' gap-1 flex flex-col'>
-                                        <h1>{room.roomName}</h1>
-                                        <p className='text-light-white text-xs'>{room.address || "1930 St, LaSanta Alley, 21"}</p>
-                                    </div>
-                                    <div className='flex gap-1 items-center'>
-                                        <p className='font-medium'>$ {room.rentPerDay}</p>
-                                        <p className='text-light-white self-end text-[10px] italic'>/ PerDay</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ) : loadingAni.map((data, index) => <div key={index} className='flex flex-col bg-light-gray rounded-2xl p-2 ' >
-                            <div className='h-56 overflow-hidden rounded-lg'>
-                                <div className='w-full h-full bg-medium-gray rounded-lg animate-pulse'></div>
-                            </div>
-                            <div className='px-2 flex justify-between items-end py-2'>
-                                <div className=' gap-1 flex flex-col'>
-                                    <h1 className='w-[100px] h-[24px] bg-medium-gray rounded-lg animate-pulse'></h1>
-                                    <p className='text-light-white text-xs w-[150px] h-[16px] bg-medium-gray rounded-lg animate-pulse'></p>
-                                </div>
-                                <div className='flex gap-1 items-center'>
-                                    <p className='w-[50px] h-[24px] bg-medium-gray rounded-lg animate-pulse'></p>
-                                    <p className='text-light-white self-end text-[10px] italic'>/ PerDay</p>
-                                </div>
-                            </div>
-                        </div>)
+                            <RoomCard room={room} key={room._id} />
+                        ) : loadingAni.map((data, index) =>
+                            <LoadingCard key={index} />
+                        )
                     }
                 </div>
             </div>

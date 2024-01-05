@@ -295,3 +295,47 @@ export const CancelRoomController = async (req, res, next) => {
         res.status(400).json({ errorMessage: error.message })
     }
 }
+
+export const getWishlist = async (req, res) => {
+    try {
+        const id = req.user.id;
+        const user = await User.findById(id);
+        const filteredRooms = user.wishlist.map(async (id) => {
+            const room = await Room.findById(id);
+            return room;
+        })
+        res.status(200).json({ wishlist: filteredRooms });
+
+    } catch (error) {
+        // Sending Unhandled Error As Response
+        res.status(400).json({ error: error.message })
+    }
+}
+
+export const addWishList = async (req, res) => {
+    try {
+        const id = req.user.id;
+        const user = await User.findById(id);
+        user.wishlist.push(req.params.id);
+        user.save();
+        res.status(200).json({ message: "added To WishList" });
+
+    } catch (error) {
+        // Sending Unhandled Error As Response
+        res.status(400).json({ error: error.message })
+    }
+}
+
+export const removeFromWishList = async (req, res) => {
+    try {
+        const id = req.user.id;
+        const user = await User.findById(id);
+        user.wishlist = user.wishlist.filter(id => id !== req.params.id);
+        user.save();
+        res.status(200).json({ message: "removed from WishList" });
+
+    } catch (error) {
+        // Sending Unhandled Error As Response
+        res.status(400).json({ error: error.message })
+    }
+}

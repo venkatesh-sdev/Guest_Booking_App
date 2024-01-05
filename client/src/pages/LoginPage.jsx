@@ -20,6 +20,7 @@ const LoginPage = () => {
         if (user.status === 'user not available') {
             alert('User Not Exists');
             navigate('/register')
+            dispatch(resetStatus())
         }
 
     }, [dispatch, navigate, user.isLoggedIn, user.status])
