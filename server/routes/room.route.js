@@ -1,14 +1,16 @@
 import { Router } from 'express'
 
 const router = Router();
-import { UpdateRoomController, DeleteRoomController, BookRoomController, CancelRoomController, GetAllRoomsController, GetRoomController, CreateRoomController, getWishlist, removeFromWishList, addWishList } from '../controllers/room.controller.js';
+import { UpdateRoomController, DeleteRoomController, BookRoomController, CancelRoomController, GetAllRoomsController, 
+    // GetRoomController,
+     CreateRoomController, getWishlist, removeFromWishList, addWishList } from '../controllers/room.controller.js';
 import { verifyToken } from '../middlewares/auth.middleware.js';
 
 
 // Get All Rooms
 router.get('/allrooms', GetAllRoomsController);
 // Get Room
-router.get('/:id', GetRoomController);
+// router.get('/getroom/:id', GetRoomController);
 // CreateRoom
 router.post('/create', verifyToken, CreateRoomController)
 // UpdateRoom
@@ -24,6 +26,6 @@ router.get('/wishlist', verifyToken, getWishlist);
 //add To wishList
 router.put('/wishlist/:id', verifyToken, addWishList);
 // Remove form wishlist
-router.delete('/wishlist/:delete', verifyToken, removeFromWishList);
+router.delete('/wishlist/:id', verifyToken, removeFromWishList);
 
 export default router;

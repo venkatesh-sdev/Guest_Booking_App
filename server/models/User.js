@@ -19,11 +19,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    wishlist: [
-        {
-            type: String,
-        }
-    ],
+    wishlist: {
+        type: [],
+        default: []
+    },
     roomBookedHistory: [
         {
             type: String,

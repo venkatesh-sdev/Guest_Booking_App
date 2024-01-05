@@ -28,8 +28,7 @@ const DashBoardPage = () => {
     const [navigationData, setNavigationData] = useState(
         navigations[0]
     );
-    const { user, isLoggedIn } = useSelector(getUser);
-    const navigate = useNavigate();
+    const { user } = useSelector(getUser);
 
 
     const NavigationList = () => {
@@ -82,7 +81,7 @@ const DashBoardPage = () => {
             {/* Mobile Nav */}
             <div className='w-[200px] mx-2 min-[870px]:hidden h-[40px] bg-light-gray rounded-lg mt-2'>
                 <Select
-                    defaultValue={navigations[0]}
+                    value={navigationData}
                     options={navigations}
                     styles={colourStyles}
                     isSearchable={false}

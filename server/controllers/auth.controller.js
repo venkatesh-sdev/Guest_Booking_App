@@ -41,7 +41,7 @@ export const signUpController = async (req, res) => {
 
     } catch (error) {
         // Sending Unhandled Error As Response
-        res.status(200).json({ errorMessage: error.message })
+        res.status(200).json({ errorMd51: error.message })
     }
 }
 // SignIn
@@ -78,6 +78,6 @@ export const signInController = async (req, res, next) => {
         res.status(201).json({ token, user });
     } catch (error) {
         // Sending Unhandled Error As Response
-        res.status(200).json({ errorMessage: error.message })
+        res.status(200).json({ errorMd52: error.message })
     }
 }

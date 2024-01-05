@@ -21,20 +21,20 @@ export const GetAllRoomsController = async (req, res, next) => {
 }
 
 // GetRoom Controller
-export const GetRoomController = async (req, res, next) => {
+// export const GetRoomController = async (req, res, next) => {
 
-    try {
-        // Getting All Rooms
-        const room = await Room.findById(req.params.id);
+//     try {
+//         // Getting All Rooms
+//         const room = await Room.findById(req.params.id);
 
-        // Sending Result
-        res.status(201).json({ result: 'Success', data: room });
+//         // Sending Result
+//         res.status(201).json({ result: 'Success', data: room });
 
-    } catch (error) {
-        // Sending Unhandled Error As Response
-        res.status(400).json({ errorMessage: error.message })
-    }
-}
+//     } catch (error) {
+//         // Sending Unhandled Error As Response
+//         res.status(400).json({ errorMd53: error.message })
+//     }
+// }
 
 // CreateRoom Controller
 export const CreateRoomController = async (req, res, next) => {
@@ -78,7 +78,7 @@ export const CreateRoomController = async (req, res, next) => {
 
     } catch (error) {
         // Sending Unhandled Error As Response
-        res.status(400).json({ errorMessage: error.message })
+        res.status(400).json({ errorMd54: error.message })
     }
 }
 
@@ -105,7 +105,7 @@ export const UpdateRoomController = async (req, res, next) => {
         res.status(200).json({ message: "Updated SuccessFully", data: updatedRoom });
     } catch (error) {
         // Sending Unhandled Error As Response
-        res.status(400).json({ errorMessage: error.message })
+        res.status(400).json({ errorMd55: error.message })
     }
 }
 
@@ -131,7 +131,7 @@ export const DeleteRoomController = async (req, res, next) => {
         res.status(200).json({ message: "Deleted SuccessFully" });
     } catch (error) {
         // Sending Unhandled Error As Response
-        res.status(400).json({ errorMessage: error.message })
+        res.status(400).json({ errorMd56: error.message })
     }
 }
 
@@ -230,7 +230,7 @@ export const BookRoomController = async (req, res, next) => {
 
     } catch (error) {
         // Sending Unhandled Error As Response
-        res.status(400).json({ errorMessage: error.message })
+        res.status(400).json({ errorMd57: error.message })
     }
 }
 
@@ -300,15 +300,17 @@ export const getWishlist = async (req, res) => {
     try {
         const id = req.user.id;
         const user = await User.findById(id);
-        const filteredRooms = user.wishlist.map(async (id) => {
+        let filteredRooms = user.wishlist.map(async (id) => {
             const room = await Room.findById(id);
             return room;
         })
-        res.status(200).json({ wishlist: filteredRooms });
+        filteredRooms = await Promise.all(filteredRooms)
+        return res.status(200).json({ rooms: filteredRooms });
 
     } catch (error) {
         // Sending Unhandled Error As Response
-        res.status(400).json({ error: error.message })
+        console.log(error.message)
+        return res.status(200).json({ error: error.message })
     }
 }
 
@@ -316,6 +318,11 @@ export const addWishList = async (req, res) => {
     try {
         const id = req.user.id;
         const user = await User.findById(id);
+
+        if (user.wishlist.find(value => value === req.params.id)) {
+            return res.status(200).json("It's already Added to WishList")
+        }
+
         user.wishlist.push(req.params.id);
         user.save();
         res.status(200).json({ message: "added To WishList" });

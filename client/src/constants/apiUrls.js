@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 const BASE_URL = 'https://wild-red-ladybug-suit.cyclic.app';
+// const BASE_URL = 'http://localhost:3001'
 
 const URL_Generator = (route) => BASE_URL + route;
 
@@ -16,6 +17,7 @@ export default ({
     apiDeleteRoom: URL_Generator('/room/delete'),
     apiCancelRoom: URL_Generator('/room/cancelroom'),
     apiBookRoom: URL_Generator('/room/bookroom'),
+    apiWishList: URL_Generator('/room/wishlist'),
 })
 
 

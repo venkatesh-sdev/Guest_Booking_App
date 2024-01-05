@@ -5,10 +5,11 @@ export const verifyToken = async (req, res, next) => {
 
         // Getting Authorization Token
         let token = req.header("Authorization");
+        console.log(token)
 
         // Checking Token is Present or Not 
         if (!token)
-            return res.status(200).json({ message: "Status Denied" });
+            return res.status(400).json({ message: "Status Denied" });
 
         // Checking and Spliting Data
         if (token.startsWith("Bearer "))

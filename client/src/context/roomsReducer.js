@@ -5,8 +5,12 @@ import URLS from '../constants/apiUrls';
 
 const initialState = {
     rooms: [],
+    wishlist: [],
     status: 'idle'
 }
+
+
+
 
 export const apiAllRooms = createAsyncThunk('rooms/allrooms', async () => {
     try {

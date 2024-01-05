@@ -14,13 +14,13 @@ import AddRoomPage from './components/AddRoomPage';
 const App = () => {
   const user = useSelector(getUser);
   const dispatch = useDispatch();
-  const roomsData = useSelector(getRooms);
+  const roomsData = useSelector(state=>state.rooms);
   useEffect(() => {
     if (roomsData.status === 'success')
       return;
     else
       dispatch(apiAllRooms());
-  }, [dispatch, roomsData.status])
+  }, [])
 
   // if (user.isLoggedIn) {
   //   return (
