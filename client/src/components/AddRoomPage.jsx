@@ -10,6 +10,8 @@ import { Navigate } from 'react-router-dom';
 
 const AddRoomPage = () => {
 
+
+
     const token = useSelector(getToken);
     const [message, setMessage] = useState('Add Room');
     const [progress, setProgress] = useState({ started: false, pc: 0 });
@@ -74,27 +76,30 @@ const AddRoomPage = () => {
             if (data.floorNumber && data.roomName && data.numberOfBeds && data.maximumRentDays && data.minimumRentDays && data.rentPerDay) {
 
                 // Using File Storage
-                // const formData = new FormData();
-                // for (const [key, value] of Object.entries(data)) {
-                //     formData.append(`${key}`, value);
-                // }
-
-                // images.map(image => { formData.append('files', image) })
+                const formData = new FormData();
+                for (const [key, value] of Object.entries(data)) {
+                    formData.append(`${key}`, value);
+                }
+                images.map(image => { formData.append('files', image) })
 
                 // Using MongoDB to Store Image
-                const base64Images = [];
-                const base64 = images.map((image) => convertToBase64(image))
-                await Promise.all(base64).then(imageData => base64Images.push(imageData));
+                // const base64Images = [];
+                // const base64 = images.map((image) => convertToBase64(image))
+                // await Promise.all(base64).then(imageData => base64Images.push(imageData));
 
                 // Request
-                const result = await axios.post(URLS.apiCreateRoom, {
-                    ...data,
-                    roomImages: base64Images[0]
-                }, {
-                    onUploadProgress: (progressEvent) => {
-                        setProgress(prev => ({ ...prev, pc: progressEvent.progress * 100 }))
-                    }, headers: { "Authorization": `Bearer ${token}`, }
-                });
+                const result = await axios.post(
+                    URLS.apiCreateRoom,
+                    formData
+                    // {
+                    // ...data,
+                    // roomImages: base64Images[0]
+                    // }
+                    , {
+                        onUploadProgress: (progressEvent) => {
+                            setProgress(prev => ({ ...prev, pc: progressEvent.progress * 100 }))
+                        }, headers: { "Authorization": `Bearer ${token}`, }
+                    });
                 console.log(result.data)
                 setMessage('Room Added Successfully')
                 setTimeout(() => {
@@ -115,6 +120,11 @@ const AddRoomPage = () => {
             }
         } catch (error) {
             setMessage("Error On Adding")
+            setTimeout(() => {
+                    setMessage('Add Room')
+                }, 2000)
+
+                setProgress(prev => ({ pc: 0, started: false }))
             console.log(error)
         }
     }

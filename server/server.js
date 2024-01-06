@@ -54,7 +54,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // --- Routes With Files --- //
-// app.post('/room/create', verifyToken, upload.array('files'), CreateRoomController);
+app.post('/room/create', verifyToken, upload.array('files'), CreateRoomController);
 
 
 

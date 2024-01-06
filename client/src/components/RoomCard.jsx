@@ -3,7 +3,7 @@
 import axios from 'axios';
 import ProfilePlaceHolder from '../assets/profile_placeholder.png';
 import React from 'react'
-import apiUrls from '../constants/apiUrls';
+import apiUrls, { assetsUrl } from '../constants/apiUrls';
 import { useDispatch, useSelector } from 'react-redux';
 import { getToken, updateUser } from '../context/authReducer';
 import { IoHeart } from 'react-icons/io5';
@@ -23,7 +23,7 @@ const RoomCard = ({ room }) => {
         <div className='flex flex-col bg-light-gray rounded-2xl p-2' >
             <div className='h-56 overflow-hidden rounded-lg relative'>
                 {
-                    room.roomImages.length > 0 ? <img className='w-full h-full object-cover' src={room.roomImages[0]} /> : <img className='w-full h-full object-cover' src={ProfilePlaceHolder} />
+                    room.roomImages.length > 0 ? <img className='w-full h-full object-cover' src={assetsUrl(room.roomImages[0])} /> : <img className='w-full h-full object-cover' src={ProfilePlaceHolder} />
                 }
                 <button className='absolute top-2 left-2 bg-blue-600 p-2 rounded-lg' onClick={addToWishList}><IoHeart /></button>
             </div>

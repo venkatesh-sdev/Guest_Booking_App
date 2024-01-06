@@ -4,7 +4,8 @@ const router = Router();
 import {
     UpdateRoomController, DeleteRoomController, BookRoomController, CancelRoomController, GetAllRoomsController,
     GetRoomController,
-    CreateRoomController, addWishList
+    // CreateRoomController,
+     addWishList
 } from '../controllers/room.controller.js';
 import { verifyToken } from '../middlewares/auth.middleware.js';
 
@@ -14,7 +15,7 @@ router.get('/allrooms', GetAllRoomsController);
 // Get Room
 router.get('/getroom/:id', GetRoomController);
 // CreateRoom
-router.post('/create', verifyToken, CreateRoomController)
+// router.post('/create', verifyToken, CreateRoomController)
 // UpdateRoom
 router.put('/update/:id', verifyToken, UpdateRoomController);
 // DeleteRoom

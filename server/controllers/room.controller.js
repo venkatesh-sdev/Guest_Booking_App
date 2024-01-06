@@ -45,16 +45,19 @@ export const CreateRoomController = async (req, res, next) => {
 
         if (!houseOwner) return res.status(400).json({ message: "User not Found Please SignUp as User to create a Rooms" });
 
-        // let files = req.files;
-        // if (files.length > 0) {
-        //     files = files.map(data => data.filename);
-        // }
+        // Creating Room and Store Images in Storage
+        let files = req.files;
+        if (files.length > 0) {
+            files = files.map(data => data.filename);
+        }
+        const otherFeatures = req.body.otherFeatures.split(',');
+        const newRoom = await Room.create({ houseOwnerId: req.user.id, ...req.body, otherFeatures, roomImages: files });
+
 
         // Creating Room and Store Images on MongoDb
-        const newRoom = await Room.create({ houseOwnerId: req.user.id, ...req.body });
+        // const newRoom = await Room.create({ houseOwnerId: req.user.id, ...req.body });
 
-        // Creating Room and Store Images in Storage
-        // const newRoom = await Room.create({ houseOwnerId: req.user.id, ...req.body, roomImages: files });
+
 
         // Adding room to the HouseOwner total rooms
         houseOwner.yourRooms.push(newRoom._id);
@@ -75,6 +78,7 @@ export const CreateRoomController = async (req, res, next) => {
 
     } catch (error) {
         // Sending Unhandled Error As Response
+        console.log(error)
         res.status(400).json({ errorMd54: error.message })
     }
 }
