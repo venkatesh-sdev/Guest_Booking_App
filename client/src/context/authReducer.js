@@ -41,7 +41,11 @@ const AuthReducer = createSlice({
         resetStatus: (state) => {
             state.status = 'idle';
         },
-
+        updateUser: (state, action) => {
+            localStorage.removeItem('user');
+            state.user = action.payload?.user
+            localStorage.setItem('user', JSON.stringify(state.user))
+        },
         Logout: (state) => {
             localStorage.removeItem('token');
             localStorage.removeItem('isLoggedIn');
@@ -71,7 +75,7 @@ const AuthReducer = createSlice({
                 state.status = 'loggedin';
                 console.log(action.payload)
 
-                if(action.payload?.message){
+                if (action.payload?.message) {
                     state.status = 'user not available';
                     return;
                 }
@@ -93,7 +97,7 @@ const AuthReducer = createSlice({
 
 export const {
     resetStatus,
-    Logout
+    Logout, updateUser
 } = AuthReducer.actions;
 
 

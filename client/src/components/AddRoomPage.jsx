@@ -104,14 +104,14 @@ const AddRoomPage = () => {
                 setProgress(prev => ({ pc: 0, started: false }))
 
                 // Reseting Data
-                // roomNameRef.current.value = '';
-                // floorNumberRef.current.value = '';
-                // noOfBedsRef.current.value = '';
-                // rentPerDayRef.current.value = '';
-                // minNoDays.current.value = '';
-                // maxNoDays.current.value = '';
-                // setOtherFeatures([]);
-                // setImages([]);
+                roomNameRef.current.value = '';
+                floorNumberRef.current.value = '';
+                noOfBedsRef.current.value = '';
+                rentPerDayRef.current.value = '';
+                minNoDays.current.value = '';
+                maxNoDays.current.value = '';
+                setOtherFeatures([]);
+                setImages([]);
             }
         } catch (error) {
             setMessage("Error On Adding")

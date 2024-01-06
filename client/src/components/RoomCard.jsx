@@ -4,19 +4,20 @@ import axios from 'axios';
 import ProfilePlaceHolder from '../assets/profile_placeholder.png';
 import React from 'react'
 import apiUrls from '../constants/apiUrls';
-import { useSelector } from 'react-redux';
-import { getToken } from '../context/authReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { getToken, updateUser } from '../context/authReducer';
 import { IoHeart } from 'react-icons/io5';
 
 const RoomCard = ({ room }) => {
     const token = useSelector(getToken)
+    const dispatch = useDispatch();
     const addToWishList = async () => {
         const { data } = await axios.put(
             `${apiUrls.apiWishList}/${room._id}`,
             {},
             { headers: { "Authorization": `Bearer ${token}`, } }
         )
-        console.log(data)
+        dispatch(updateUser({ user: data.user }))
     }
     return (
         <div className='flex flex-col bg-light-gray rounded-2xl p-2' >
