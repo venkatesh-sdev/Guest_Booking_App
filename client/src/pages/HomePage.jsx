@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { apiAllRooms, getRooms } from '../context/roomsReducer';
+import { apiAllRooms, getRooms, getRoomsStatus } from '../context/roomsReducer';
 import { HiHome } from "react-icons/hi2";
 import { FiSearch } from "react-icons/fi";
 
@@ -12,16 +12,21 @@ import RoomCard from '../components/RoomCard';
 import LoadingCard from '../components/LoadingCard';
 
 const HomePage = () => {
+    const roomsStatus = useSelector(getRoomsStatus);
     const roomsData = useSelector(getRooms);
     const { user, isLoggedIn } = useSelector(getUser);
+    const [isLoaded, setIsLoaded] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     useEffect(() => {
-        if (roomsData.status === 'success')
+        if (roomsStatus === 'success' && roomsData.length === 0) {
+            setIsLoaded(true)
             return;
-        else
+        }
+        else {
             dispatch(apiAllRooms());
-    }, [dispatch, roomsData.status]);
+        }
+    }, [dispatch, roomsData, roomsStatus]);
 
     const loadingAni = [1, 2, 3, 4, 5, 6, 7, 8];
 
@@ -88,7 +93,7 @@ const HomePage = () => {
                     {
                         roomsData.length > 0 ? roomsData.map(room =>
                             <RoomCard room={room} key={room._id} />
-                        ) : loadingAni.map((data, index) =>
+                        ) : isLoaded ? <h1 className='text-2xl font-medium text-white italic'>No Room Available Yet</h1> : loadingAni.map((data, index) =>
                             <LoadingCard key={index} />
                         )
                     }

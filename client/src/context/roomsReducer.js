@@ -40,6 +40,7 @@ const roomsReducer = createSlice({
 })
 
 export const getRooms = (state) => state.rooms.rooms
+export const getRoomsStatus = (state) => state.rooms.status;
 
 // export const { } = roomsReducer.actions;
 
