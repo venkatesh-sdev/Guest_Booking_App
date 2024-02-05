@@ -11,11 +11,11 @@ const App = () => {
   const dispatch = useDispatch();
   const roomsData = useSelector(state => state.rooms);
   useEffect(() => {
-    if (roomsData.status === 'success')
+    if (roomsData?.status === 'success')
       return;
     else
       dispatch(apiAllRooms());
-  }, [dispatch, roomsData.status])
+  }, [dispatch, roomsData?.status])
 
   return (
     <Routes>

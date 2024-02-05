@@ -18,8 +18,8 @@ import { colourStyles } from '../constants/customSelectStyle'
 const navigations = [
     { dataComponent: <Profile />, value: 'Profile', label: 'Profile', index: 0 },
     { dataComponent: <WishList />, value: 'WishList', label: 'WishList', index: 1 },
-    { dataComponent: <YourRooms />, value: 'YourRooms', label: 'YourRooms', index: 2 },
-    { dataComponent: <BookedRooms />, value: 'Booked Rooms', label: 'Booked Rooms', index: 3 },
+    { dataComponent: <YourRooms />, value: 'YourProducts', label: 'YourProducts', index: 2 },
+    { dataComponent: <BookedRooms />, value: 'Booked Products', label: 'Booked Products', index: 3 },
     { dataComponent: <BookingHistory />, value: 'Booking History', label: 'Booking History', index: 4 },
 ]
 

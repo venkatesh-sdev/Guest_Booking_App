@@ -6,10 +6,11 @@ import URLS from '../constants/apiUrls.js';
 import { convertToBase64 } from '../constants/base64Converter.js';
 import { useSelector } from 'react-redux';
 import { getToken } from '../context/authReducer.js';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const AddRoomPage = () => {
 
+    const navigate = useNavigate();
 
 
     const token = useSelector(getToken);
@@ -76,25 +77,25 @@ const AddRoomPage = () => {
             if (data.floorNumber && data.roomName && data.numberOfBeds && data.maximumRentDays && data.minimumRentDays && data.rentPerDay) {
 
                 // Using File Storage
-                const formData = new FormData();
-                for (const [key, value] of Object.entries(data)) {
-                    formData.append(`${key}`, value);
-                }
-                images.map(image => { formData.append('files', image) })
+                // const formData = new FormData();
+                // for (const [key, value] of Object.entries(data)) {
+                //     formData.append(`${key}`, value);
+                // }
+                // images.map(image => { formData.append('files', image) })
 
                 // Using MongoDB to Store Image
-                // const base64Images = [];
-                // const base64 = images.map((image) => convertToBase64(image))
-                // await Promise.all(base64).then(imageData => base64Images.push(imageData));
+                const base64Images = [];
+                const base64 = images.map((image) => convertToBase64(image))
+                await Promise.all(base64).then(imageData => base64Images.push(imageData));
 
                 // Request
                 const result = await axios.post(
                     URLS.apiCreateRoom,
-                    formData
-                    // {
-                    // ...data,
-                    // roomImages: base64Images[0]
-                    // }
+                    // formData
+                    {
+                        ...data,
+                        roomImages: base64Images[0]
+                    }
                     , {
                         onUploadProgress: (progressEvent) => {
                             setProgress(prev => ({ ...prev, pc: progressEvent.progress * 100 }))
@@ -121,10 +122,10 @@ const AddRoomPage = () => {
         } catch (error) {
             setMessage("Error On Adding")
             setTimeout(() => {
-                    setMessage('Add Room')
-                }, 2000)
+                setMessage('Add Room')
+            }, 2000)
 
-                setProgress(prev => ({ pc: 0, started: false }))
+            setProgress(prev => ({ pc: 0, started: false }))
             console.log(error)
         }
     }
@@ -138,7 +139,7 @@ const AddRoomPage = () => {
             <div className='bg-light-gray min-w-[300px] min-[720px]:w-[700px]  px-6 py-8 rounded-xl'>
                 <div className='flex justify-between items-center'>
                     <h1 className='text-4xl font-medium italic pb-5'>Add Your Room</h1>
-                    <button className='self-start p-1 hover:bg-medium-gray transition-all duration-200 rounded-md'><IoClose size={25} /></button>
+                    <button onClick={() => navigate('/')} className='self-start p-1 hover:bg-medium-gray transition-all duration-200 rounded-md'><IoClose size={25} /></button>
                 </div>
                 <div className='flex gap-5 sm:items-center justify-between sm:flex-row flex-col'>
                     <div className='flex sm:w-1/2 flex-col gap-2 '>

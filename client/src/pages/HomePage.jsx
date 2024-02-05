@@ -51,12 +51,19 @@ const HomePage = () => {
                             <button onClick={() => navigate('/register')} className='px-5 py-2 bg-light-blue rounded-md text-center'>
                                 Register
                             </button>
-                        </div> : <button onClick={() => {
-                            dispatch(Logout());
-                            navigate('/login');
-                        }} className='px-5 py-2 bg-light-blue rounded-md text-center'>
-                            Logout
-                        </button>}
+                        </div> : <div className='gap-2 flex items-center'>
+                            <button onClick={() => {
+                                dispatch(Logout());
+                                navigate('/login');
+                            }} className='px-5 py-2 bg-light-blue rounded-md text-center'>
+                                Logout
+                            </button>
+                            <button onClick={() => {
+                                navigate('/addroom');
+                            }} className='px-5 py-2 bg-light-blue rounded-md text-center'>
+                                Add Product
+                            </button>
+                        </div>}
                     </div>
                     <div className='pl-5'>
                         <button onClick={() => { isLoggedIn === 'true' ? navigate('dashboard') : navigate('/login') }} className='w-12 h-12 rounded-full overflow-hidden'>
