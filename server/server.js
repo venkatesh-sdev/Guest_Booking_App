@@ -73,7 +73,7 @@ const DBConnection = async () => {
         app.listen(
             process.env.PORT,
             () => {
-                console.log("Server Running in http://localhost:" + process.env.PORT);
+                console.log("Server Running ");
                 // Data Insertion
                 // console.log("Data Added Succesfully");
             }
