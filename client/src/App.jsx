@@ -15,7 +15,7 @@ const App = () => {
       return;
     else
       dispatch(apiAllRooms());
-  }, [dispatch, roomsData?.status])
+  }, [])
 
   return (
     <Routes>
