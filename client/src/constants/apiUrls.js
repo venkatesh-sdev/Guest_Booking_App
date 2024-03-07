@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const BASE_URL = 'https://guest-booking-app-y4ac.onrender.com/'
+const BASE_URL = 'https://guest-booking-app-y4ac.onrender.com'
 // const BASE_URL = 'http://localhost:3001'
 
 const URL_Generator = (route) => BASE_URL + route;
